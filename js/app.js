@@ -34,8 +34,8 @@ class Player {
 		this.life = 3;
 		this.knives = 2;
 		this.fuel = fuel;
-		this.x = 250
-		this.y = 100;
+		this.x = 220
+		this.y = 550;
 		this.height = 100;
 		this.width  = 40;
 	}
@@ -76,7 +76,7 @@ class Zombie {
 		this.health = 1;
 		this.x = Math.floor(Math.random() * 450);
 		this.y = 0;
-		this.height = 80;
+		this.height = 50;
 		this.width = 50;
 	}
 	draw(){
@@ -96,7 +96,7 @@ class Zombie {
 }
 let zombie = new Zombie(1)
 
-zombie.draw()
+// zombie.draw()
 	// Perhaps something within the animation function can do this?
 
 
@@ -205,6 +205,16 @@ const spriteDraw = () => {
 }
 spriteDraw()
 
+const zombieDraw = () => {
+	let zombieSprite = new Image();
+	zombieSprite.onload = () => {
+		ctx.drawImage(zombieSprite, zombie.x, zombie.y);
+		ctx.beginPath();
+	}
+	zombieSprite.src = 'css/zombie.gif'
+}
+zombieDraw()
+
 // I will need to build key listeners into the player object
 $(document).on('keydown', (event) => {
 		// The listeners will be used for movement
@@ -233,11 +243,11 @@ $(document).on('keydown', (event) => {
 	clearCanvas()
 	// This will redraw the playerOne object every time the event
 	// listener is triggered
-	playerOne.draw()
+	// playerOne.draw()
 	// This calls the draw sprite function to overlay the sprite on the
 	// player object
 	spriteDraw()
-	// zombie.draw()
+	zombieDraw()
 	// Display Player Lives
 	displayLives()
 	// Display Fuel
