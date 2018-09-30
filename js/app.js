@@ -43,6 +43,8 @@ class Player {
 	// I'll need a draw method
 		ctx.beginPath()
 		ctx.rect(this.x, this.y, this.height, this.width)
+		ctx.fillStyle = 'red'
+		ctx.fill()
 		ctx.closePath()
 	
 	}
@@ -69,19 +71,32 @@ let playerOne = new Player(5)
 
 // I am going to need a class for Zombies
 class Zombie {
-	constructor(speed, x) {
+	constructor(speed) {
 		this.speed = speed;
 		this.health = 1;
-		this.x = x;
+		this.x = Math.floor(Math.random() * 450);
 		this.y = 0;
+		this.height = 80;
+		this.width = 50;
 	}
 	draw(){
-	// The draw function will need to randomize the location that the zombie 
+	// The draw function will need to randomize the location that the zombie
+		ctx.beginPath()
+		ctx.rect(this.x, this.y, this.height, this.width)
+		ctx.fillStyle = 'white'
+		ctx.fill()
+		ctx.closePath()
 	// shows up in from the top of the screen
 	// Random location/spawns values will need to be generated?
 	}
+	isDeader(){
+		// if(this.health < 1){
+		// }
+	}
 }
+let zombie = new Zombie(1)
 
+zombie.draw()
 	// Perhaps something within the animation function can do this?
 
 
@@ -164,13 +179,13 @@ const displayLives = () => {
 const displayKnives = () => {
 	ctx.font = '18px arial';
 	ctx.fillStyle = 'white';
-	ctx.fillText('Knives: ' + playerOne.life, 10, 45);
+	ctx.fillText('Knives: ' + playerOne.knives, 10, 45);
 }
 
 const displayFuel = () => {
 	ctx.font = '18px arial';
 	ctx.fillStyle = 'white';
-	ctx.fillText('Fuel: ' + playerOne.life, 10, 67);
+	ctx.fillText('Fuel: ' + playerOne.fuel, 10, 67);
 }
 		// It will increase if a life is picked up
 		// It will decrease if the player runs into a zombie
@@ -188,8 +203,7 @@ const spriteDraw = () => {
 	}
 	playerSprite.src = 'css/Player-Sprite-cutout.PNG'
 }
-
-
+spriteDraw()
 
 // I will need to build key listeners into the player object
 $(document).on('keydown', (event) => {
@@ -223,6 +237,7 @@ $(document).on('keydown', (event) => {
 	// This calls the draw sprite function to overlay the sprite on the
 	// player object
 	spriteDraw()
+	// zombie.draw()
 	// Display Player Lives
 	displayLives()
 	// Display Fuel
@@ -232,14 +247,31 @@ $(document).on('keydown', (event) => {
 })
 		// Throwing knives
 		// Pausing the game?
+// Timer and animation for the game
 
 
 
+let counter = 0;
 
+function animate() {
+	clearCanvas()
+	counter++
+	console.log("counter: " + counter);
+	zombie.y++
+	// This calls the draw sprite function to overlay the sprite on the
+	// player object
+	zombie.draw()
+	playerOne.draw()
+	spriteDraw()
+	// Display Player stats:
+	displayLives()
+	displayFuel()
+	displayKnives()
+	// Function recursion
+	window.requestAnimationFrame(animate);
+}
 
-
-
-
+// animate()
 
 
 
