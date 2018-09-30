@@ -1,3 +1,4 @@
+console.log('it is linked');
 /***********************************************************************************************************************************
 ************************************************************************************************************************************
 ** 																															      **
@@ -20,25 +21,105 @@
 **																															      **
 ************************************************************************************************************************************
 ***********************************************************************************************************************************/
+const canvas = (document).getElementById("my-canvas");
+const ctx = canvas.getContext("2d");
+const clearCanvas = () => {
+	ctx.clearRect(0, 0, canvas.width, canvas.height)
+}
+// I am going to need user variables that will house the 
+	// sprites for the user.
 
 
-// I'm going to need a user class or object?
-	// I'll need control methods
-	// Throw methods
+// I'm going to need a user class
+class Player {
+	constructor(fuel) {
+		this.life = 3;
+		this.knives = 2;
+		this.fuel = fuel;
+		this.x = 250
+		this.y = 100;
+		this.height = 45;
+		this.width  = 45;
+	}
+	draw() {
+	// I'll need a draw method
+		ctx.beginPath()
+		ctx.rect(this.x, this.y, this.height, this.width)
+		ctx.fillStyle = 'white';
+		ctx.fill()
+		ctx.closePath()
 	
+	}
+	// I'll need a control method
+	moveUp() {
+		this.y -= 15
+	}
+	moveDown() {
+		this.y += 15	
+	}
+	moveRight() {
+		this.x += 15
+	}
+	moveLeft() {
+		this.x -= 15
+	}
+	attack() {
+	// I'll need an attack methods
+		
+	}
+}
+
+let playerOne = new Player(5)
 
 // I am going to need a class for Zombies
+class Zombie {
+	constructor(speed, x) {
+		this.speed = speed;
+		this.health = 1;
+		this.x = x;
+		this.y = 0;
+	}
+	draw(){
+	// The draw function will need to randomize the location that the zombie 
+	// shows up in from the top of the screen
 	// Random location/spawns values will need to be generated?
+	}
+}
+
 	// Perhaps something within the animation function can do this?
 
 
 // I am going to need a class for gas cans
+class Fuel {
+	constructor(speed, x){
+		this.speed = speed;
+		this.x = x;
+	}
+	draw(){
 	// Random location/spawns values will need to be generated?
+		
+	}
+	reFuel(){
+		
+	}
+}
 	// Perhaps something within the animation function can do this?
 
 
 // I am going to need a class for knives
+class Knives {
+	constructor(speed, x){
+		this.speed = speed;
+		this.x = x;
+	}
+	draw(){
 	// Random location/spawns values will need to be generated?
+
+	}
+	damage(){
+		
+	}
+}
 	// Perhaps something within the animation function can do this?
 
 
@@ -83,9 +164,78 @@
 
 
 // I will need to build key listeners into the player object
+$(document).on('keydown', (event) => {
+	if(event.keyCode === 38) {
+		if(playerOne.y > 0){
+		playerOne.moveUp()	
+		}
+	}
+	if(event.keyCode === 40) {
+		if(playerOne.y < canvas.height - playerOne.height){
+		playerOne.moveDown()	
+		}
+	}
+	if(event.keyCode === 37) {
+		if(playerOne.x > 0){
+		playerOne.moveLeft()	
+		}
+	}
+	if(event.keyCode === 39) {
+		if(playerOne.x < canvas.width - playerOne.width){
+		playerOne.moveRight()	
+		}
+	}
+	// This will clear the canvas every time one of the event listeners
+	// is triggered
+	clearCanvas()
+	// This will redraw the playerOne object every time the event
+	// listener is triggered
+	playerOne.draw()
+})
 		// The listeners will be used for movement
 		// Throwing knives
 		// Pausing the game?
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
