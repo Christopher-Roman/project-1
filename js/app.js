@@ -26,8 +26,6 @@ const ctx = canvas.getContext("2d");
 const clearCanvas = () => {
 	ctx.clearRect(0, 0, canvas.width, canvas.height)
 }
-// I am going to need user variables that will house the 
-	// sprites for the user.
 
 
 // I'm going to need a user class
@@ -157,19 +155,36 @@ class Knives {
 
 
 // will need to build a counter for the player's lives:
+const displayLives = () => {
+	ctx.font = '18px arial';
+	ctx.fillStyle = 'white';
+	ctx.fillText('Lives: ' + playerOne.life, 10, 22);
+}
+
+const displayKnives = () => {
+	ctx.font = '18px arial';
+	ctx.fillStyle = 'white';
+	ctx.fillText('Knives: ' + playerOne.life, 10, 45);
+}
+
+const displayFuel = () => {
+	ctx.font = '18px arial';
+	ctx.fillStyle = 'white';
+	ctx.fillText('Fuel: ' + playerOne.life, 10, 67);
+}
 		// It will increase if a life is picked up
 		// It will decrease if the player runs into a zombie
 
 
 
 // This function will draw the sprite over the player object.
+// I am going to need user variables that will house the 
+	// sprites for the user.
 const spriteDraw = () => {
-	
 	let playerSprite = new Image();
 	playerSprite.onload = () => {
-	ctx.drawImage(playerSprite, playerOne.x, playerOne.y);
-	ctx.beginPath();
-
+		ctx.drawImage(playerSprite, playerOne.x, playerOne.y);
+		ctx.beginPath();
 	}
 	playerSprite.src = 'css/Player-Sprite-cutout.PNG'
 }
@@ -208,6 +223,12 @@ $(document).on('keydown', (event) => {
 	// This calls the draw sprite function to overlay the sprite on the
 	// player object
 	spriteDraw()
+	// Display Player Lives
+	displayLives()
+	// Display Fuel
+	displayFuel()
+	// display Knives
+	displayKnives()
 })
 		// Throwing knives
 		// Pausing the game?
