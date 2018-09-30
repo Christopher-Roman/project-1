@@ -38,15 +38,13 @@ class Player {
 		this.fuel = fuel;
 		this.x = 250
 		this.y = 100;
-		this.height = 45;
-		this.width  = 45;
+		this.height = 100;
+		this.width  = 40;
 	}
 	draw() {
 	// I'll need a draw method
 		ctx.beginPath()
 		ctx.rect(this.x, this.y, this.height, this.width)
-		ctx.fillStyle = 'white';
-		ctx.fill()
 		ctx.closePath()
 	
 	}
@@ -163,8 +161,24 @@ class Knives {
 		// It will decrease if the player runs into a zombie
 
 
+
+// This function will draw the sprite over the player object.
+const spriteDraw = () => {
+	
+	let playerSprite = new Image();
+	playerSprite.onload = () => {
+	ctx.drawImage(playerSprite, playerOne.x, playerOne.y);
+	ctx.beginPath();
+
+	}
+	playerSprite.src = 'css/Player-Sprite-cutout.PNG'
+}
+
+
+
 // I will need to build key listeners into the player object
 $(document).on('keydown', (event) => {
+		// The listeners will be used for movement
 	if(event.keyCode === 38) {
 		if(playerOne.y > 0){
 		playerOne.moveUp()	
@@ -191,8 +205,10 @@ $(document).on('keydown', (event) => {
 	// This will redraw the playerOne object every time the event
 	// listener is triggered
 	playerOne.draw()
+	// This calls the draw sprite function to overlay the sprite on the
+	// player object
+	spriteDraw()
 })
-		// The listeners will be used for movement
 		// Throwing knives
 		// Pausing the game?
 
