@@ -173,6 +173,7 @@ const game = {
 	currentPlayer: null,
 	timeSpan: 1,
 	time: 0,
+	timer: null,
 	zombieIndex: 0,
 	generatePlayer(){
 		let player = new Player
@@ -190,6 +191,7 @@ const game = {
 			game.generatePlayer()
 			game.makeNewZombie()
 			game.playerFuel()
+			game.gameOver()
 			game.time++
 			game.zombies[0].draw();
 			game.zombies.y--
@@ -204,8 +206,14 @@ const game = {
 		}
 	},
 	playerFuel() {
-		if(game.time % 5 === 0){
+		if(game.time > 4 && game.time % 5 === 0){
 			playerOne.fuel--
+		}
+	},
+	gameOver() {
+		if(playerOne.life === 0 || playerOne.fuel === 0){
+			clearInterval(this.timer)
+			gameOver()
 		}
 	}
 }
@@ -286,6 +294,11 @@ const displayFuel = () => {
 	ctx.font = '18px arial';
 	ctx.fillStyle = 'white';
 	ctx.fillText('Fuel: ' + playerOne.fuel, 10, 67);
+}
+const gameOver = () => {
+	ctx.font = '35px arial';
+	ctx.fillStyle = 'red';
+	ctx.fillText('GAME OVER', 150, 250);
 }
 		// It will increase if a life is picked up
 		// It will decrease if the player runs into a zombie
@@ -376,6 +389,7 @@ function animate() {
 	playerOne.draw()
 	zombie.draw()
 	playerOne.move()
+	game.gameOver()
 	zombieCollisionDetection(playerOne, zombie)
 	knifeCollisionDetection(playerOne, knife)
 	fuelCollisionDetection(playerOne, fuel)
