@@ -36,8 +36,8 @@ class Player {
 		this.fuel = fuel;
 		this.x = 220
 		this.y = 550;
-		this.height = 40;
-		this.width  = 100;
+		this.height = 100;
+		this.width  = 40;
 		this.up = false;
 		this.down = false;
 		this.left = false;
@@ -58,26 +58,47 @@ class Player {
 	move(){
 
 		if(this.up === true){
-			this.y -= 5
+			this.y -= 5;
+			if(this.y <= 0 ){
+				this.y = 0
+			}
 		}
 		if(this.down === true){
 			this.y += 5
+			if(this.y > canvas.height - this.height){
+				this.y = canvas.height - this.height
+			}
 		}	
 		if(this.right === true){
 			this.x += 5
+			if(this.x > canvas.width - this.width){
+				this.x = canvas.width - this.width
+			}
 		}
 		if(this.left == true){
 			this.x -= 5
+			if(this.x <= 0){
+				this.x = 0
+			}
 		}
 	}
 	attack() {
 	// I'll need an attack method
 		
 	}
+	isDead() {
+		if(this.life === 0){
+			const displayGameOver = () => {
+			ctx.font = '50px arial';
+			ctx.fillStyle = 'white';
+			ctx.fillText('You Lose!', 250, 250);
+			}
+		}
+	}
 }
 
 let playerOne = new Player(5)
-playerOne.move()
+// playerOne.move()
 
 
 
@@ -90,8 +111,8 @@ class Zombie {
 		this.y = 0;
 		this.xDirection = 0
 		this.yDirection = 3;
-		this.height = 50;
-		this.width = 50;
+		this.height = 64;
+		this.width = 64;
 	}
 	draw(){
 	// The draw function will need to randomize the location that the zombie
@@ -179,48 +200,32 @@ const game = {
 $(document).on('keydown', (event) => {
 		// The listeners will be used for movement
 	if(event.keyCode === 38){
-		if(playerOne.y > 0){
-			playerOne.up = true;	
-		} else {
-			playerOne.up = false	
-		}
+		playerOne.up = true;	
 	}
 	else if(event.keyCode === 40){
-		if(playerOne.y < canvas.height - playerOne.height * 3){
-			playerOne.down = true;	
-		} else {
-			playerOne.down = false	
-		}
+		playerOne.down = true;	
 	}
 	else if(event.keyCode === 37){
-		if(playerOne.x > 0){
-			playerOne.left = true;	
-		}else {
-			playerOne.left = false	
-		}
+		playerOne.left = true;
 	}
 	else if(event.keyCode === 39){
-		if(playerOne.x < canvas.width - playerOne.width / 2){
-			playerOne.right = true;	
-		}else {
-			playerOne.right = false	
-		}
+		playerOne.right = true;	
 	}
 })
 
 $(document).on('keyup', (event) => {
 		// The listeners will be used for movement
 	if(event.keyCode === 38) {
-			playerOne.up = false;	
+		playerOne.up = false;	
 	}
 	else if(event.keyCode === 40) {
-			playerOne.down = false;	
+		playerOne.down = false;	
 	}
 	else if(event.keyCode === 37) {
-			playerOne.left = false;	
+		playerOne.left = false;	
 	}
 	else if(event.keyCode === 39) {
-			playerOne.right = false;	
+		playerOne.right = false;	
 	}
 })
 
@@ -349,7 +354,7 @@ function animate() {
 	// Function recursion
 	window.requestAnimationFrame(animate)
 }
-
+// playerOne.isDead()
 animate()
 
 
