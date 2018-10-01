@@ -1,4 +1,6 @@
 #my-canvas {
-	background-color: lavender;
+	background-image: url('background.png');
+	width: 500;
+	height: 650;
 	border: 15px solid black;
 }

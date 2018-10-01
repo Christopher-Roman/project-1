@@ -36,8 +36,8 @@ class Player {
 		this.fuel = fuel;
 		this.x = 220
 		this.y = 550;
-		this.height = 100;
-		this.width  = 40;
+		this.height = 40;
+		this.width  = 100;
 	}
 	draw() {
 	// I'll need a draw method
@@ -71,11 +71,12 @@ let playerOne = new Player(5)
 
 // I am going to need a class for Zombies
 class Zombie {
-	constructor(speed) {
-		this.speed = speed;
+	constructor(yDirection) {
 		this.health = 1;
 		this.x = Math.floor(Math.random() * 450);
 		this.y = 0;
+		this.xDirection = 0
+		this.yDirection = 3;
 		this.height = 50;
 		this.width = 50;
 	}
@@ -94,7 +95,7 @@ class Zombie {
 		// }
 	}
 }
-let zombie = new Zombie(1)
+let zombie = new Zombie(3)
 
 // zombie.draw()
 	// Perhaps something within the animation function can do this?
@@ -259,7 +260,14 @@ $(document).on('keydown', (event) => {
 		// Pausing the game?
 // Timer and animation for the game
 
-
+const collisionDetection = (player, zombie) => {
+	if(player.x < zombie.x + zombie.width &&
+		player.x + player.width > zombie.x &&
+		player.y < zombie.y + zombie.height &&
+		player.y + player.height > zombie.y) {
+		console.log('hit!')
+	}
+}
 
 let counter = 0;
 
@@ -268,12 +276,15 @@ function animate() {
 	counter++
 	console.log("counter: " + counter);
 	zombie.y++
+	// ctx.drawImage(zombie, zombie.x, zombie.y)
 	// This calls the draw sprite function to overlay the sprite on the
 	// player object
 	zombie.draw()
+	zombieDraw()
 	playerOne.draw()
 	spriteDraw()
 	// Display Player stats:
+	collisionDetection(playerOne, zombie)
 	displayLives()
 	displayFuel()
 	displayKnives()
