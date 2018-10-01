@@ -28,7 +28,7 @@ const clearCanvas = () => {
 }
 
 
-// I'm going to need a user class
+// Player Class
 class Player {
 	constructor(fuel) {
 		this.life = 3;
@@ -44,16 +44,12 @@ class Player {
 		this.right = false;
 	}
 	draw() {
-	// I'll need a draw method
 		ctx.beginPath()
 		let playerSprite = new Image();
 		playerSprite.src = 'css/Player-Sprite-cutout.PNG'
 		ctx.drawImage(playerSprite, playerOne.x, playerOne.y);
 	}
-	
-	// I'll need a control method
 	move(){
-
 		if(this.up === true){
 			this.y -= 5;
 			if(this.y <= 0 ){
@@ -79,19 +75,17 @@ class Player {
 			}
 		}
 	}
-	attack() {
-	// I'll need an attack method
-		
+	attack() {	
 	}
 }
 
 let playerOne = new Player(5)
 
-// I am going to need a class for Zombies
+// Zombie Class
 class Zombie {
 	constructor(yDirection) {
 		this.health = 1;
-	// shows up in from the top of the screen
+	// shows up at the top of the screen
 		this.x = Math.floor(Math.random() * 450);
 		this.y = 0;
 		this.xDirection = 0
@@ -100,24 +94,17 @@ class Zombie {
 		this.width = 64;
 	}
 	draw(){
-	// The draw function will need to randomize the location that the zombie
 		ctx.beginPath()
 		let zombieSprite = new Image();
 		zombieSprite.src = 'css/zombie.gif'
 		ctx.drawImage(zombieSprite, zombie.x, zombie.y);
 	}
 	isDeader(){
-		// if(this.health < 1){
-		// }
 	}
 }
 let zombie = new Zombie(3)
 
-// zombie.draw()
-	// Perhaps something within the animation function can do this?
-
-
-// I am going to need a class for gas cans
+// Fuel Class
 class Fuel {
 	constructor(yDirection) {
 		this.health = 1;
@@ -129,8 +116,6 @@ class Fuel {
 		this.width = 45;
 	}
 	draw(){
-	// The draw function will need to randomize the location for the
-	// gas can to spawn
 		ctx.beginPath()
 		let fuelSprite = new Image();
 		fuelSprite.src = 'css/gasCan.png'
@@ -140,7 +125,7 @@ class Fuel {
 
 let fuel = new Fuel(3)
 
-// I am going to need a class for knives
+// Knife Class
 class Knife {
 	constructor(yDirection) {
 		this.health = 1;
@@ -152,8 +137,6 @@ class Knife {
 		this.width = 45;
 	}
 	draw(){
-	// The draw function will need to randomize the location for the
-	// gas can to spawn
 		ctx.beginPath()
 		let knifeSprite = new Image();
 		knifeSprite.src = 'css/knife.png'
@@ -163,11 +146,7 @@ class Knife {
 
 let knife = new Knife(3)
 
-// I will need a game object
-		// The game object can run on an interval to spawn
-		// the various things in the level based on random values
-		// the interval can run a timer that will help control the
-		// progress bar and deplete fuel
+// Game Object
 const game = {
 	zombies: [],
 	currentPlayer: null,
@@ -219,8 +198,8 @@ const game = {
 }
 game.timer()
 
+// Key Down Listener
 $(document).on('keydown', (event) => {
-		// The listeners will be used for movement
 	if(event.keyCode === 38){
 		playerOne.up = true;	
 	}
@@ -235,8 +214,8 @@ $(document).on('keydown', (event) => {
 	}
 })
 
+// Key Up Listener
 $(document).on('keyup', (event) => {
-		// The listeners will be used for movement
 	if(event.keyCode === 38) {
 		playerOne.up = false;	
 	}
@@ -251,101 +230,33 @@ $(document).on('keyup', (event) => {
 	}
 })
 
-// I'm going to need to build collision detection that has different effects depending on what is hit
-		// Detection for Zombies hitting the player
-			// Knife hitting zombie
-
-		// Detection for knives being picked up
-
-		// Detection for gas cans being picked up
-
-
-// I will need to build a fuel bar 
-		// It will need to decrease over time 
-		// It will need to increase when a gas can is picked up
-
-
-
-
-// I will need to build a gauge that shows your progress in the level
-		// Should this just be based on a timer in the game? 
-		// The sprite on the gauge could just move at a set rate that is paused
-		// if you hit a zombie to delay it since you will slow down a bit if that
-		// happens
-
-
-// will need to build a counter for the player's lives:
+// Life Text Display
 const displayLives = () => {
 	ctx.font = '18px arial';
 	ctx.fillStyle = 'white';
 	ctx.fillText('Lives: ' + playerOne.life, 10, 22);
 }
 
-// I will need to build a knife counter 
-		// It will increase by one up to a max of five when knives are picked up
-		// It will decrease by one when a knife is used
+//Knife Text Display
 const displayKnives = () => {
 	ctx.font = '18px arial';
 	ctx.fillStyle = 'white';
 	ctx.fillText('Knives: ' + playerOne.knives, 10, 45);
 }
-
+// Fuel Text Display
 const displayFuel = () => {
 	ctx.font = '18px arial';
 	ctx.fillStyle = 'white';
 	ctx.fillText('Fuel: ' + playerOne.fuel, 10, 67);
 }
+// Gameover Text Display
 const gameOver = () => {
 	ctx.font = '35px arial';
 	ctx.fillStyle = 'red';
 	ctx.fillText('GAME OVER', 150, 250);
 }
-		// It will increase if a life is picked up
-		// It will decrease if the player runs into a zombie
 
-
-// This function will draw the sprite over the player object.
-// I am going to need user variables that will house the 
-	// sprites for the user.
-// const spriteDraw = () => {
-// 	let playerSprite = new Image();
-// 	playerSprite.src = 'css/Player-Sprite-cutout.PNG'
-// 	ctx.drawImage(playerSprite, playerOne.x, playerOne.y);
-// 	ctx.beginPath();
-// }
-// spriteDraw()
-
-// 	// zombieSprite.onload = () => {
-// const zombieDraw = () => {
-// 	let zombieSprite = new Image();
-// 	ctx.drawImage(zombieSprite, zombie.x, zombie.y);
-// 	ctx.beginPath();
-// 	zombieSprite.src = 'css/zombie.gif'
-// }
-// zombieDraw()
-
-// I will need to build key listeners into the player object
-	// This will clear the canvas every time one of the event listeners
-	// is triggered
-	// clearCanvas()
-	// This will redraw the playerOne object every time the event
-	// listener is triggered
-	// playerOne.draw()
-	// This calls the draw sprite function to overlay the sprite on the
-	// player object
-	// spriteDraw()
-	// zombieDraw()
-	// Display Player Lives
-	// displayLives()
-	// Display Fuel
-	// displayFuel()
-	// display Knives
-	// displayKnives()
-
-		// Throwing knives
-		// Pausing the game?
-// Timer and animation for the game
-
+// Zombie Collision detection and logic
 const zombieCollisionDetection = (player, zombie) => {
 	if(player.x < zombie.x + zombie.width &&
 		player.x + player.width > zombie.x &&
@@ -356,7 +267,7 @@ const zombieCollisionDetection = (player, zombie) => {
 		player.y = 550;
 	}
 }
-
+// Knife Collision detection and logic
 const knifeCollisionDetection = (player, knife) => {
 	if(player.x < knife.x + knife.width &&
 		player.x + player.width > knife.x &&
@@ -366,7 +277,7 @@ const knifeCollisionDetection = (player, knife) => {
 	}
 }
 
-
+// Fuel Collision detection and logic
 const fuelCollisionDetection = (player, fuel) => {
 	if(player.x < fuel.x + fuel.width &&
 		player.x + player.width > fuel.x &&
@@ -375,6 +286,12 @@ const fuelCollisionDetection = (player, fuel) => {
 		playerOne.fuel += 1
 	}
 }
+
+// I will need to build a gauge that shows your progress in the level
+		// Should this just be based on a timer in the game? 
+		// The sprite on the gauge could just move at a set rate that is paused
+		// if you hit a zombie to delay it since you will slow down a bit if that
+		// happens
 
 let counter = 0;
 
