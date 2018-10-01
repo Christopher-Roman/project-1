@@ -1,4 +1,3 @@
-console.log('it is linked');
 /***********************************************************************************************************************************
 ************************************************************************************************************************************
 ** 																															      **
@@ -21,12 +20,12 @@ console.log('it is linked');
 **																															      **
 ************************************************************************************************************************************
 ***********************************************************************************************************************************/
+
 const canvas = (document).getElementById("my-canvas");
 const ctx = canvas.getContext("2d");
 const clearCanvas = () => {
 	ctx.clearRect(0, 0, canvas.width, canvas.height)
 }
-
 
 // Player Class
 class Player {
@@ -261,7 +260,8 @@ const zombieCollisionDetection = (player, zombie) => {
 	if(player.x < zombie.x + zombie.width &&
 		player.x + player.width > zombie.x &&
 		player.y < zombie.y + zombie.height &&
-		player.y + player.height > zombie.y) {
+		player.y + player.height > zombie.y &&
+		playerOne.life > 0) {
 		playerOne.life -= 1
 		player.x = 220;
 		player.y = 550;
@@ -272,7 +272,8 @@ const knifeCollisionDetection = (player, knife) => {
 	if(player.x < knife.x + knife.width &&
 		player.x + player.width > knife.x &&
 		player.y < knife.y + knife.height &&
-		player.y + player.height > knife.y) {
+		player.y + player.height > knife.y && 
+		playerOne.knives < 5 && playerOne.life > 0) {
 		playerOne.knives += 1
 	}
 }
@@ -282,7 +283,8 @@ const fuelCollisionDetection = (player, fuel) => {
 	if(player.x < fuel.x + fuel.width &&
 		player.x + player.width > fuel.x &&
 		player.y < fuel.y + fuel.height &&
-		player.y + player.height > fuel.y) {
+		player.y + player.height > fuel.y && 
+		playerOne.fuel < 10 && playerOne.life > 0) {
 		playerOne.fuel += 1
 	}
 }
