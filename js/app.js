@@ -38,6 +38,10 @@ class Player {
 		this.y = 550;
 		this.height = 40;
 		this.width  = 100;
+		this.up = false;
+		this.down = false;
+		this.left = false;
+		this.right = false;
 	}
 	draw() {
 	// I'll need a draw method
@@ -48,20 +52,23 @@ class Player {
 		let playerSprite = new Image();
 		playerSprite.src = 'css/Player-Sprite-cutout.PNG'
 		ctx.drawImage(playerSprite, playerOne.x, playerOne.y);
+	}
 	
-	}
 	// I'll need a control method
-	moveUp() {
-		this.y -= 15
-	}
-	moveDown() {
-		this.y += 15	
-	}
-	moveRight() {
-		this.x += 15
-	}
-	moveLeft() {
-		this.x -= 15
+	move(){
+
+		if(this.up === true){
+			this.y -= 5
+		}
+		if(this.down === true){
+			this.y += 5
+		}	
+		if(this.right === true){
+			this.x += 5
+		}
+		if(this.left == true){
+			this.x -= 5
+		}
 	}
 	attack() {
 	// I'll need an attack method
@@ -70,6 +77,10 @@ class Player {
 }
 
 let playerOne = new Player(5)
+playerOne.move()
+
+
+
 
 // I am going to need a class for Zombies
 class Zombie {
@@ -158,14 +169,60 @@ const game = {
 
 	},
 	timer() {
-		
+
 	},
 	drawZombies() {
 
 	}
 }
 
+$(document).on('keydown', (event) => {
+		// The listeners will be used for movement
+	if(event.keyCode === 38){
+		if(playerOne.y > 0){
+			playerOne.up = true;	
+		} else {
+			playerOne.up = false	
+		}
+	}
+	else if(event.keyCode === 40){
+		if(playerOne.y < canvas.height - playerOne.height * 3){
+			playerOne.down = true;	
+		} else {
+			playerOne.down = false	
+		}
+	}
+	else if(event.keyCode === 37){
+		if(playerOne.x > 0){
+			playerOne.left = true;	
+		}else {
+			playerOne.left = false	
+		}
+	}
+	else if(event.keyCode === 39){
+		if(playerOne.x < canvas.width - playerOne.width / 2){
+			playerOne.right = true;	
+		}else {
+			playerOne.right = false	
+		}
+	}
+})
 
+$(document).on('keyup', (event) => {
+		// The listeners will be used for movement
+	if(event.keyCode === 38) {
+			playerOne.up = false;	
+	}
+	else if(event.keyCode === 40) {
+			playerOne.down = false;	
+	}
+	else if(event.keyCode === 37) {
+			playerOne.left = false;	
+	}
+	else if(event.keyCode === 39) {
+			playerOne.right = false;	
+	}
+})
 
 // I'm going to need to build collision detection that has different effects depending on what is hit
 		// Detection for Zombies hitting the player
@@ -237,28 +294,6 @@ const displayFuel = () => {
 // zombieDraw()
 
 // I will need to build key listeners into the player object
-$(document).on('keydown', (event) => {
-		// The listeners will be used for movement
-	if(event.keyCode === 38) {
-		if(playerOne.y > 0){
-			playerOne.moveUp()	
-		}
-	}
-	if(event.keyCode === 40) {
-		if(playerOne.y < canvas.height - playerOne.height){
-			playerOne.moveDown()	
-		}
-	}
-	if(event.keyCode === 37) {
-		if(playerOne.x > 0){
-			playerOne.moveLeft()	
-		}
-	}
-	if(event.keyCode === 39) {
-		if(playerOne.x < canvas.width - playerOne.width){
-			playerOne.moveRight()	
-		}
-	}
 	// This will clear the canvas every time one of the event listeners
 	// is triggered
 	clearCanvas()
@@ -275,17 +310,19 @@ $(document).on('keydown', (event) => {
 	displayFuel()
 	// display Knives
 	displayKnives()
-})
+
 		// Throwing knives
 		// Pausing the game?
 // Timer and animation for the game
 
-const collisionDetection = (player, zombie) => {
+const zombieCollisionDetection = (player, zombie) => {
 	if(player.x < zombie.x + zombie.width &&
 		player.x + player.width > zombie.x &&
 		player.y < zombie.y + zombie.height &&
 		player.y + player.height > zombie.y) {
-		console.log('hit!')
+		playerOne.life -= 1
+		player.x = 220;
+		player.y = 550;
 	}
 }
 
@@ -302,14 +339,15 @@ function animate() {
 	zombie.draw()
 	// zombieDraw()
 	playerOne.draw()
+	playerOne.move()
 	// spriteDraw()
 	// Display Player stats:
-	collisionDetection(playerOne, zombie)
+	zombieCollisionDetection(playerOne, zombie)
 	displayLives()
 	displayFuel()
 	displayKnives()
 	// Function recursion
-	window.requestAnimationFrame(animate);
+	window.requestAnimationFrame(animate)
 }
 
 animate()
