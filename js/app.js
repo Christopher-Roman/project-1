@@ -42,10 +42,12 @@ class Player {
 	draw() {
 	// I'll need a draw method
 		ctx.beginPath()
-		ctx.rect(this.x, this.y, this.height, this.width)
-		ctx.fillStyle = 'red'
-		ctx.fill()
-		ctx.closePath()
+		// ctx.rect(this.x, this.y, this.height, this.width)
+		// ctx.fillStyle = 'red'
+		// ctx.fill()
+		let playerSprite = new Image();
+		playerSprite.src = 'css/Player-Sprite-cutout.PNG'
+		ctx.drawImage(playerSprite, playerOne.x, playerOne.y);
 	
 	}
 	// I'll need a control method
@@ -62,7 +64,7 @@ class Player {
 		this.x -= 15
 	}
 	attack() {
-	// I'll need an attack methods
+	// I'll need an attack method
 		
 	}
 }
@@ -83,10 +85,18 @@ class Zombie {
 	draw(){
 	// The draw function will need to randomize the location that the zombie
 		ctx.beginPath()
-		ctx.rect(this.x, this.y, this.height, this.width)
-		ctx.fillStyle = 'white'
-		ctx.fill()
-		ctx.closePath()
+		// ctx.rect(this.x, this.y, this.height, this.width)
+		// ctx.fillStyle = 'white'
+		// ctx.fill()
+		// ctx.closePath()
+		// ctx.beginPath();
+		let zombieSprite = new Image();
+		zombieSprite.src = 'css/zombie.gif'
+		ctx.drawImage(zombieSprite, zombie.x, zombie.y);
+		// ctx.beginPath();
+
+
+
 	// shows up in from the top of the screen
 	// Random location/spawns values will need to be generated?
 	}
@@ -136,11 +146,24 @@ class Knives {
 
 
 
+
 // I will need a game object
 		// The game object can run on an interval to spawn
 		// the various things in the level based on random values
 		// the interval can run a timer that will help control the
 		// progress bar and deplete fuel
+const game = {
+	zombies: [],
+	makeNewZombie() {
+
+	},
+	timer() {
+		
+	},
+	drawZombies() {
+
+	}
+}
 
 
 
@@ -196,47 +219,44 @@ const displayFuel = () => {
 // This function will draw the sprite over the player object.
 // I am going to need user variables that will house the 
 	// sprites for the user.
-const spriteDraw = () => {
-	let playerSprite = new Image();
-	playerSprite.onload = () => {
-		ctx.drawImage(playerSprite, playerOne.x, playerOne.y);
-		ctx.beginPath();
-	}
-	playerSprite.src = 'css/Player-Sprite-cutout.PNG'
-}
-spriteDraw()
+// const spriteDraw = () => {
+// 	let playerSprite = new Image();
+// 	playerSprite.src = 'css/Player-Sprite-cutout.PNG'
+// 	ctx.drawImage(playerSprite, playerOne.x, playerOne.y);
+// 	ctx.beginPath();
+// }
+// spriteDraw()
 
-const zombieDraw = () => {
-	let zombieSprite = new Image();
-	zombieSprite.onload = () => {
-		ctx.drawImage(zombieSprite, zombie.x, zombie.y);
-		ctx.beginPath();
-	}
-	zombieSprite.src = 'css/zombie.gif'
-}
-zombieDraw()
+// 	// zombieSprite.onload = () => {
+// const zombieDraw = () => {
+// 	let zombieSprite = new Image();
+// 	ctx.drawImage(zombieSprite, zombie.x, zombie.y);
+// 	ctx.beginPath();
+// 	zombieSprite.src = 'css/zombie.gif'
+// }
+// zombieDraw()
 
 // I will need to build key listeners into the player object
 $(document).on('keydown', (event) => {
 		// The listeners will be used for movement
 	if(event.keyCode === 38) {
 		if(playerOne.y > 0){
-		playerOne.moveUp()	
+			playerOne.moveUp()	
 		}
 	}
 	if(event.keyCode === 40) {
 		if(playerOne.y < canvas.height - playerOne.height){
-		playerOne.moveDown()	
+			playerOne.moveDown()	
 		}
 	}
 	if(event.keyCode === 37) {
 		if(playerOne.x > 0){
-		playerOne.moveLeft()	
+			playerOne.moveLeft()	
 		}
 	}
 	if(event.keyCode === 39) {
 		if(playerOne.x < canvas.width - playerOne.width){
-		playerOne.moveRight()	
+			playerOne.moveRight()	
 		}
 	}
 	// This will clear the canvas every time one of the event listeners
@@ -247,8 +267,8 @@ $(document).on('keydown', (event) => {
 	// playerOne.draw()
 	// This calls the draw sprite function to overlay the sprite on the
 	// player object
-	spriteDraw()
-	zombieDraw()
+	// spriteDraw()
+	// zombieDraw()
 	// Display Player Lives
 	displayLives()
 	// Display Fuel
@@ -274,15 +294,15 @@ let counter = 0;
 function animate() {
 	clearCanvas()
 	counter++
-	console.log("counter: " + counter);
+	// console.log("counter: " + counter);
 	zombie.y++
 	// ctx.drawImage(zombie, zombie.x, zombie.y)
 	// This calls the draw sprite function to overlay the sprite on the
 	// player object
 	zombie.draw()
-	zombieDraw()
+	// zombieDraw()
 	playerOne.draw()
-	spriteDraw()
+	// spriteDraw()
 	// Display Player stats:
 	collisionDetection(playerOne, zombie)
 	displayLives()
@@ -292,7 +312,7 @@ function animate() {
 	window.requestAnimationFrame(animate);
 }
 
-// animate()
+animate()
 
 
 
