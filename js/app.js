@@ -86,20 +86,19 @@ class Player {
 	// I'll need an attack method
 		
 	}
-	isDead() {
-		if(this.life === 0){
-			const displayGameOver = () => {
-			ctx.font = '50px arial';
-			ctx.fillStyle = 'white';
-			ctx.fillText('You Lose!', 250, 250);
-			}
-		}
-	}
 }
 
 let playerOne = new Player(5)
 // playerOne.move()
-
+// const isDead = () => {
+// 	if(playerOne.life === 0){
+// 		const displayGameOver = () => {
+// 		ctx.font = '50px arial';
+// 		ctx.fillStyle = 'white';
+// 		ctx.fillText('You Lose!', 250, 250);
+// 		}
+// 	}
+// }
 
 
 
@@ -145,39 +144,49 @@ let zombie = new Zombie(3)
 
 // I am going to need a class for gas cans
 class Fuel {
-	constructor(speed, x){
-		this.speed = speed;
-		this.x = x;
+	constructor(yDirection) {
+		this.health = 1;
+		this.x = Math.floor(Math.random() * 450);
+		this.y = 0;
+		this.xDirection = 0
+		this.yDirection = 3;
+		this.height = 45;
+		this.width = 45;
 	}
 	draw(){
-	// Random location/spawns values will need to be generated?
-		
-	}
-	reFuel(){
-		
+	// The draw function will need to randomize the location for the
+	// gas can to spawn
+		ctx.beginPath()
+		let fuelSprite = new Image();
+		fuelSprite.src = 'css/gasCan.png'
+		ctx.drawImage(fuelSprite, fuel.x, fuel.y);
 	}
 }
-	// Perhaps something within the animation function can do this?
 
+let fuel = new Fuel(3)
 
 // I am going to need a class for knives
-class Knives {
-	constructor(speed, x){
-		this.speed = speed;
-		this.x = x;
+class Knife {
+	constructor(yDirection) {
+		this.health = 1;
+		this.x = Math.floor(Math.random() * 450);
+		this.y = 0;
+		this.xDirection = 0
+		this.yDirection = 3;
+		this.height = 45;
+		this.width = 45;
 	}
 	draw(){
-	// Random location/spawns values will need to be generated?
-
-	}
-	damage(){
-		
+	// The draw function will need to randomize the location for the
+	// gas can to spawn
+		ctx.beginPath()
+		let knifeSprite = new Image();
+		knifeSprite.src = 'css/knife.png'
+		ctx.drawImage(knifeSprite, knife.x, knife.y);
 	}
 }
-	// Perhaps something within the animation function can do this?
 
-
-
+let knife = new Knife(3)
 
 // I will need a game object
 		// The game object can run on an interval to spawn
@@ -186,14 +195,24 @@ class Knives {
 		// progress bar and deplete fuel
 const game = {
 	zombies: [],
+	currentPlayer: null,
+	timeOn: false,
+	timeSpan: 1,
+	time: 0,
 	makeNewZombie() {
-
+		const zombie = new Zombie(3)
 	},
 	timer() {
+		this.timer = setInterval(function (){
+			game.makeNewZombie()
+			game.zombies.push(zombie)
+			game.zombies[0].draw()
+			console.log(game.zombies);
+		}, 1000)
 
 	},
 	drawZombies() {
-
+		game.zombies.draw()
 	}
 }
 
@@ -277,7 +296,6 @@ const displayFuel = () => {
 		// It will decrease if the player runs into a zombie
 
 
-
 // This function will draw the sprite over the player object.
 // I am going to need user variables that will house the 
 	// sprites for the user.
@@ -301,7 +319,7 @@ const displayFuel = () => {
 // I will need to build key listeners into the player object
 	// This will clear the canvas every time one of the event listeners
 	// is triggered
-	clearCanvas()
+	// clearCanvas()
 	// This will redraw the playerOne object every time the event
 	// listener is triggered
 	// playerOne.draw()
@@ -310,11 +328,11 @@ const displayFuel = () => {
 	// spriteDraw()
 	// zombieDraw()
 	// Display Player Lives
-	displayLives()
+	// displayLives()
 	// Display Fuel
-	displayFuel()
+	// displayFuel()
 	// display Knives
-	displayKnives()
+	// displayKnives()
 
 		// Throwing knives
 		// Pausing the game?
@@ -331,38 +349,48 @@ const zombieCollisionDetection = (player, zombie) => {
 	}
 }
 
+const knifeCollisionDetection = (player1, knife) => {
+	if(player1.x < knife.x + knife.width &&
+		player1.x + player1.width > knife.x &&
+		player1.y < knife.y + knife.height &&
+		player1.y + player1.height > knife.y) {
+		playerOne.knives += 1
+	}
+}
+
+
+const fuelCollisionDetection = (player2, fuel) => {
+	if(player2.x < fuel.x + fuel.width &&
+		player2.x + player2.width > fuel.x &&
+		player2.y < fuel.y + fuel.height &&
+		player2.y + player2.height > fuel.y) {
+		playerOne.fuel += 1
+	}
+}
+
 let counter = 0;
 
+	// game.timer()
 function animate() {
 	clearCanvas()
 	counter++
-	// console.log("counter: " + counter);
 	zombie.y++
-	// ctx.drawImage(zombie, zombie.x, zombie.y)
-	// This calls the draw sprite function to overlay the sprite on the
-	// player object
+	fuel.y++
+	knife.y++
 	zombie.draw()
-	// zombieDraw()
+	fuel.draw()
+	knife.draw()
 	playerOne.draw()
 	playerOne.move()
-	// spriteDraw()
-	// Display Player stats:
 	zombieCollisionDetection(playerOne, zombie)
+	knifeCollisionDetection(playerOne, knife)
+	fuelCollisionDetection(playerOne, fuel)
 	displayLives()
 	displayFuel()
 	displayKnives()
-	// Function recursion
 	window.requestAnimationFrame(animate)
 }
-// playerOne.isDead()
 animate()
-
-
-
-
-
-
-
 
 
 
