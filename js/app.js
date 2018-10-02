@@ -32,8 +32,9 @@ class Player {
 	constructor(fuel) {
 		this.life = 3;
 		this.knives = 2;
+		this.projectiles = [];
 		this.fuel = fuel;
-		this.x = 150
+		this.x = 150;
 		this.y = 550;
 		this.height = 100;
 		this.width  = 40;
@@ -41,12 +42,30 @@ class Player {
 		this.down = false;
 		this.left = false;
 		this.right = false;
+		this.attack = false;
 	}
 	draw() {
 		ctx.beginPath()
 		const playerSprite = new Image();
 		playerSprite.src = 'css/Player-Sprite-cutout.PNG'
 		ctx.drawImage(playerSprite, this.x, this.y);
+	}
+	attacks() {
+		if(this.knives > 0 && this.attack == true) {
+			const projectile = new Projectiles()
+			this.projectiles.push(projectile)
+			this.drawProjectile()
+		}
+	}
+	drawProjectile() {
+		for(let i = 0; i < this.projectiles.length; i++){
+			this.projectiles[i].draw()
+		}
+	}
+	moveProjectile() {
+		for(let i = 0; i < this.projectiles.length; i++){
+			this.projectiles[i].y -= 10
+		}
 	}
 	move(){
 		if(this.up === true){
@@ -74,15 +93,24 @@ class Player {
 			}
 		}
 	}
-	attack() {
+}		
+
+const player = new Player(5)
+
+class Projectiles {
+	constructor(){
+		this.x = player.x;
+		this.y = player.y;
+		this.width = 45;
+		this.height = 45;
+	}
+	draw() {
 		ctx.beginPath()
 		const projectileSprite = new Image();
 		projectileSprite.src = 'css/thrownKnife.png'
 		ctx.drawImage(projectileSprite, this.x, this.y)
 	}
-}		
-
-const player = new Player(5)
+}
 
 // Zombie Class
 class Zombie {
@@ -90,7 +118,7 @@ class Zombie {
 		this.health = 1;
 		this.x = Math.floor(Math.random() * 310);
 		this.y = 0;
-		this.xDirection = 0
+		this.xDirection = 0;
 		this.yDirection = 3;
 		this.height = 64;
 		this.width = 64;
@@ -146,6 +174,7 @@ const game = {
 	zombies: [],
 	fuels: [],
 	knives: [],
+	projectiles: [],
 	time: 0,
 	timer: null,
 	generatePlayer(){
@@ -166,6 +195,10 @@ const game = {
 		const knife = new Knife()
 		game.knives.push(knife)
 	},
+	makeNewProjectiles() {
+		const projectile = new Projectiles()
+		game.projectiles.push(projectile)
+	},
 	drawZombies() {
 		for(let i = 0; i < this.zombies.length; i++) {
 			this.zombies[i].draw()
@@ -176,6 +209,11 @@ const game = {
 			let variable = Math.floor(Math.random() * 15)
 			let speed = Math.floor(Math.random() * variable)
 			this.zombies[i].y += speed
+		}
+	},
+	moveProjectiles() {
+		for(let i = 0; i < this.projectiles.length; i++){
+			this.projectiles[i].y -= 5
 		}
 	},
 	moveFuels() {
@@ -199,7 +237,10 @@ const game = {
 		}
 	},
 	playerFuel() {
-			player.fuel--
+		player.fuel--
+	},
+	playerAttack() {
+
 	},
 	gameOver() {
 		if(player.life === 0 || player.fuel === 0){
@@ -232,33 +273,39 @@ game.timer()
 
 // Key Down Listener
 $(document).on('keydown', (event) => {
-	if(event.keyCode === 38){
+	if(event.keyCode == 38){
 		player.up = true;	
 	}
-	else if(event.keyCode === 40){
+	else if(event.keyCode == 40){
 		player.down = true;	
 	}
-	else if(event.keyCode === 37){
+	else if(event.keyCode == 37){
 		player.left = true;
 	}
-	else if(event.keyCode === 39){
+	else if(event.keyCode == 39){
 		player.right = true;	
+	}
+	else if(event.keyCode == 32){
+		player.attack = true;
 	}
 })
 
 // Key Up Listener
 $(document).on('keyup', (event) => {
-	if(event.keyCode === 38) {
+	if(event.keyCode == 38) {
 		player.up = false;	
 	}
-	else if(event.keyCode === 40) {
+	else if(event.keyCode == 40) {
 		player.down = false;	
 	}
-	else if(event.keyCode === 37) {
+	else if(event.keyCode == 37) {
 		player.left = false;	
 	}
-	else if(event.keyCode === 39) {
+	else if(event.keyCode == 39) {
 		player.right = false;	
+	}
+	else if(event.keyCode == 32){
+		player.attack = false;
 	}
 })
 
@@ -387,6 +434,9 @@ function animate() {
 	game.drawKnives()
 	player.draw()
 	player.move()
+	player.attacks()
+	player.drawProjectile()
+	player.moveProjectile()
 	game.moveZombies()
 	game.moveFuels()
 	game.moveKnives()
