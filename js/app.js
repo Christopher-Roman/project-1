@@ -173,12 +173,12 @@ const game = {
 	},
 	moveZombies() {
 		for(let i = 0; i < this.zombies.length; i++){
-			let speed = Math.floor(Math.random() * 5)
+			let variable = Math.floor(Math.random() * 15)
+			let speed = Math.floor(Math.random() * variable)
 			this.zombies[i].y += speed
 		}
 	},
 	moveFuels() {
-
 		for(let i = 0; i < this.fuels.length; i++){
 			this.fuels[i].y++
 		}
@@ -314,7 +314,7 @@ const knifeCollisionDetection = (player, knife) => {
 			player.knives += 5
 			knife.splice(i, 1)
 		} else if(player.x < knife[i].x + knife[i].width &&
-			player.x + player.width > knife.x &&
+			player.x + player.width > knife[i].x &&
 			player.y < knife[i].y + knife[i].height &&
 			player.y + player.height > knife[i].y && 
 			player.knives >= 20 && player.life > 0) {
