@@ -44,9 +44,9 @@ class Player {
 	}
 	draw() {
 		ctx.beginPath()
-		let playerSprite = new Image();
+		const playerSprite = new Image();
 		playerSprite.src = 'css/Player-Sprite-cutout.PNG'
-		ctx.drawImage(playerSprite, playerOne.x, playerOne.y);
+		ctx.drawImage(playerSprite, this.x, this.y);
 	}
 	move(){
 		if(this.up === true){
@@ -76,9 +76,9 @@ class Player {
 	}
 	attack() {	
 	}
-}
+}		
 
-let playerOne = new Player(5)
+const player = new Player(5)
 
 // Zombie Class
 class Zombie {
@@ -94,14 +94,14 @@ class Zombie {
 	}
 	draw(){
 		ctx.beginPath()
-		let zombieSprite = new Image();
+		const zombieSprite = new Image();
 		zombieSprite.src = 'css/zombie.gif'
-		ctx.drawImage(zombieSprite, zombie.x, zombie.y);
+		ctx.drawImage(zombieSprite, this.x, this.y);
 	}
 	isDeader(){
 	}
 }
-let zombie = new Zombie(3)
+// const zombie = new Zombie(3)
 
 // Fuel Class
 class Fuel {
@@ -116,13 +116,13 @@ class Fuel {
 	}
 	draw(){
 		ctx.beginPath()
-		let fuelSprite = new Image();
+		const fuelSprite = new Image();
 		fuelSprite.src = 'css/gasCan.png'
-		ctx.drawImage(fuelSprite, fuel.x, fuel.y);
+		ctx.drawImage(fuelSprite, this.x, this.y);
 	}
 }
 
-let fuel = new Fuel(3)
+// const fuel = new Fuel(3)
 
 // Knife Class
 class Knife {
@@ -137,62 +137,90 @@ class Knife {
 	}
 	draw(){
 		ctx.beginPath()
-		let knifeSprite = new Image();
+		const knifeSprite = new Image();
 		knifeSprite.src = 'css/knife.png'
-		ctx.drawImage(knifeSprite, knife.x, knife.y);
+		ctx.drawImage(knifeSprite, this.x, this.y);
 	}
 }
 
-let knife = new Knife(3)
+// const knife = new Knife(3)
 
 // Game Object
 const game = {
 	zombies: [],
-	currentPlayer: null,
-	timeSpan: 1,
+	fuels: [],
+	knives: [],
 	time: 0,
 	timer: null,
-	zombieIndex: 0,
 	generatePlayer(){
-		let player = new Player
-		game.currentPlayer = player
+		const player = new Player
+		this.playerOne = player
 		player.draw()
 	},
 	makeNewZombie() {
-		if(game.time % 3 === 0){
-			let zombie = new Zombie()
-			game.zombies.push(zombie)
-		}
+		const zombie = new Zombie()
+		game.zombies.push(zombie)
 	},
-	timer() {
-		this.timer = setInterval(function (){
-			game.generatePlayer()
-			game.makeNewZombie()
-			game.playerFuel()
-			game.gameOver()
-			game.time++
-			game.zombies[0].draw();
-			game.zombies.y--
-			console.log(game.time);
-		}, 1000)
-
+	makeNewFuel() {
+		const fuel = new Fuel()
+		game.fuels.push(fuel)
+	},
+	makeNewKnife() {
+		const knife = new Knife()
+		game.knives.push(knife)
 	},
 	drawZombies() {
-		let zombieIndex = game.zombieIndex
-		if(game.time % 4){
-			game.zombies[game.zombieIndex].draw()
+		for(let i = 0; i < this.zombies.length; i++) {
+			this.zombies[i].draw()
+		}
+	},
+	drawFuels() {
+		for(let i = 0; i < this.fuels.length; i++) {
+			this.fuels[i].draw()
+		}
+	},
+	drawKnives() {
+		for(let i = 0; i < this.knives.length; i++) {
+			this.knives[i].draw()
 		}
 	},
 	playerFuel() {
-		if(game.time > 4 && game.time % 5 === 0){
-			playerOne.fuel--
-		}
+			player.fuel--
 	},
 	gameOver() {
-		if(playerOne.life === 0 || playerOne.fuel === 0){
+		if(player.life === 0 || player.fuel === 0){
 			clearInterval(this.timer)
 			gameOver()
 		}
+	},
+	timer() {
+			this.generatePlayer()
+			this.timer = setInterval(() =>{
+				if(this.time % 2 == 0) {
+					this.makeNewZombie()
+				}
+				if(this.time % 8 == 0 && this.time > 7) {
+					this.makeNewFuel()
+				}
+				if(this.time % 15 == 0 && this.time > 14) {
+					this.makeNewKnife()
+				}
+				if(this.time % 3 === 0) {
+					this.drawZombies()
+				}
+				if(this.time % 10 == 0) {
+					this.drawFuels()
+				}
+				if(this.time % 10 == 0) {
+					this.drawKnives()
+				}
+				if(this.time > 4 && this.time % 5 == 0) {
+					this.playerFuel()
+				}
+				this.gameOver()
+				this.time++
+				console.log(game.time);
+			}, 1000)
 	}
 }
 game.timer()
@@ -200,32 +228,32 @@ game.timer()
 // Key Down Listener
 $(document).on('keydown', (event) => {
 	if(event.keyCode === 38){
-		playerOne.up = true;	
+		player.up = true;	
 	}
 	else if(event.keyCode === 40){
-		playerOne.down = true;	
+		player.down = true;	
 	}
 	else if(event.keyCode === 37){
-		playerOne.left = true;
+		player.left = true;
 	}
 	else if(event.keyCode === 39){
-		playerOne.right = true;	
+		player.right = true;	
 	}
 })
 
 // Key Up Listener
 $(document).on('keyup', (event) => {
 	if(event.keyCode === 38) {
-		playerOne.up = false;	
+		player.up = false;	
 	}
 	else if(event.keyCode === 40) {
-		playerOne.down = false;	
+		player.down = false;	
 	}
 	else if(event.keyCode === 37) {
-		playerOne.left = false;	
+		player.left = false;	
 	}
 	else if(event.keyCode === 39) {
-		playerOne.right = false;	
+		player.right = false;	
 	}
 })
 
@@ -233,20 +261,20 @@ $(document).on('keyup', (event) => {
 const displayLives = () => {
 	ctx.font = '18px arial';
 	ctx.fillStyle = 'white';
-	ctx.fillText('Lives: ' + playerOne.life, 10, 22);
+	ctx.fillText('Lives: ' + player.life, 10, 22);
 }
 
 //Knife Text Display
 const displayKnives = () => {
 	ctx.font = '18px arial';
 	ctx.fillStyle = 'white';
-	ctx.fillText('Knives: ' + playerOne.knives, 10, 45);
+	ctx.fillText('Knives: ' + player.knives, 10, 45);
 }
 // Fuel Text Display
 const displayFuel = () => {
 	ctx.font = '18px arial';
 	ctx.fillStyle = 'white';
-	ctx.fillText('Fuel: ' + playerOne.fuel, 10, 67);
+	ctx.fillText('Fuel: ' + player.fuel, 10, 67);
 }
 // Gameover Text Display
 const gameOver = () => {
@@ -257,36 +285,42 @@ const gameOver = () => {
 
 // Zombie Collision detection and logic
 const zombieCollisionDetection = (player, zombie) => {
-	if(player.x < zombie.x + zombie.width &&
-		player.x + player.width > zombie.x &&
-		player.y < zombie.y + zombie.height &&
-		player.y + player.height > zombie.y &&
-		playerOne.life > 0) {
-		playerOne.life -= 1
-		player.x = 220;
-		player.y = 550;
+	for(let i = 0; i < game.zombies.length; i++) {
+		if(player.x < zombie[i].x + zombie[i].width &&
+			player.x + player.width > zombie[i].x &&
+			player.y < zombie[i].y + zombie[i].height &&
+			player.y + player.height > zombie[i].y &&
+			player.life > 0) {
+			player.life -= 1
+			player.x = 220;
+			player.y = 550;
+		}
 	}
 }
 // Knife Collision detection and logic
 const knifeCollisionDetection = (player, knife) => {
-	if(player.x < knife.x + knife.width &&
-		player.x + player.width > knife.x &&
-		player.y < knife.y + knife.height &&
-		player.y + player.height > knife.y && 
-		playerOne.knives < 5 && playerOne.life > 0) {
-		playerOne.knives += 1
+	for(let i = 0; i < game.knives.length; i++) {
+		if(player.x < knife[i].x + knife[i].width &&
+			player.x + player.width > knife.x &&
+			player.y < knife[i].y + knife[i].height &&
+			player.y + player.height > knife[i].y && 
+			player.knives < 5 && player.life > 0) {
+			player.knives += 1
+		}
 	}
 }
 
 // Fuel Collision detection and logic
 const fuelCollisionDetection = (player, fuel) => {
-	if(player.x < fuel.x + fuel.width &&
-		player.x + player.width > fuel.x &&
-		player.y < fuel.y + fuel.height &&
-		player.y + player.height > fuel.y && 
-		playerOne.fuel < 10 && playerOne.life > 0) {
-		playerOne.fuel += 1
-	}
+	for(let i = 0; i < game.fuels.length; i++) {	
+		if(player.x < fuel[i].x + fuel[i].width &&
+			player.x + player.width > fuel[i].x &&
+			player.y < fuel[i].y + fuel[i].height &&
+			player.y + player.height > fuel[i].y && 
+			player.fuel < 10 && player.life > 0) {
+			player.fuel += 1
+		}
+	}	
 }
 
 // I will need to build a gauge that shows your progress in the level
@@ -300,18 +334,24 @@ let counter = 0;
 function animate() {
 	clearCanvas()
 	counter++
-	zombie.y++
-	fuel.y++
-	knife.y++
-	fuel.draw()
-	knife.draw()
-	playerOne.draw()
-	zombie.draw()
-	playerOne.move()
+	// game.makeNewZombie()
+	// game.makeNewFuel()
+	// game.makeNewKnife()
+	// game.zombies[0].draw()
+	game.drawZombies()
+	game.drawFuels()
+	game.drawKnives()
+	// game.fuels.draw()
+	// game.knives.draw()
+	player.draw()
+	player.move()
+	game.zombies[0].y++
+	game.fuels[0].y++
+	game.knives[0].y++
 	game.gameOver()
-	zombieCollisionDetection(playerOne, zombie)
-	knifeCollisionDetection(playerOne, knife)
-	fuelCollisionDetection(playerOne, fuel)
+	zombieCollisionDetection(player, game.zombies)
+	knifeCollisionDetection(player, game.knives)
+	fuelCollisionDetection(player, game.fuels)
 	displayLives()
 	displayFuel()
 	displayKnives()
