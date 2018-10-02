@@ -251,7 +251,10 @@ const game = {
 	timer() {
 			this.generatePlayer()
 			this.timer = setInterval(() =>{
-				if(this.time % 2 == 0) {
+				if(this.time <= 50 && this.time % 2 == 0) {
+					this.makeNewZombie()
+				}
+				if(this.time > 50 && this.time % 1 == 0) {
 					this.makeNewZombie()
 				}
 				if(this.time % 8 == 0 && this.time > 7) {
