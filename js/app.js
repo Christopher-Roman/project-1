@@ -31,7 +31,7 @@ const clearCanvas = () => {
 class Player {
 	constructor(fuel) {
 		this.life = 3;
-		this.knives = 2;
+		this.knives = 5;
 		this.projectiles = [];
 		this.fuel = fuel;
 		this.x = 150;
@@ -51,9 +51,10 @@ class Player {
 	}
 	attacks() {
 		if(this.knives > 0) {
-			const projectile = new Projectiles()
+			const projectile = new Projectile()
 			this.projectiles.push(projectile)
-			this.drawProjectile()
+			// this.drawProjectile()
+			this.knives--
 		}
 	}
 	drawProjectile() {
@@ -75,13 +76,13 @@ class Player {
 		}
 		if(this.down === true){
 			this.y += 5
-			if(this.y > canvas.height - this.height){
+			if(this.y > canvas.height - this.height) {
 				this.y = canvas.height - this.height
 			}
 		}	
 		if(this.right === true){
 			this.x += 5
-			if(this.x > canvas.width - this.width){
+			if(this.x > canvas.width - this.width) {
 				this.x = canvas.width - this.width
 			}
 		}
@@ -96,12 +97,12 @@ class Player {
 
 const player = new Player(5)
 
-class Projectiles {
+class Projectile {
 	constructor(){
 		this.x = player.x;
 		this.y = player.y;
-		this.width = 45;
-		this.height = 45;
+		this.width = 15;
+		this.height = 15;
 	}
 	draw() {
 		ctx.beginPath()
@@ -175,6 +176,7 @@ const game = {
 	knives: [],
 	projectiles: [],
 	time: 0,
+	score: 0,
 	timer: null,
 	generatePlayer(){
 		const player = new Player
@@ -182,8 +184,7 @@ const game = {
 		player.draw()
 	},
 	makeNewZombie() {
-		let speed = Math.random() * 5
-		const zombie = new Zombie(speed)
+		const zombie = new Zombie()
 		game.zombies.push(zombie)
 	},
 	makeNewFuel() {
@@ -244,7 +245,7 @@ const game = {
 	gameOver() {
 		if(player.life === 0 || player.fuel === 0){
 			clearInterval(this.timer)
-			gameOver()
+			youLose()
 		}
 	},
 	timer() {
@@ -262,8 +263,13 @@ const game = {
 				if(this.time > 4 && this.time % 5 == 0) {
 					this.playerFuel()
 				}
+				if(this.score >= 200 && this.score % 200 == 0) {
+					player.life++
+				}
+				console.log(player.projectiles);
 				this.gameOver()
 				this.time++
+				this.score += 2
 			}, 1000)
 	}
 }
@@ -324,13 +330,20 @@ const displayFuel = () => {
 	ctx.fillStyle = 'white';
 	ctx.fillText('Fuel: ' + player.fuel, 10, 67);
 }
+// Survival Time Display
 const survivalTimer = () => {
 	ctx.font = '20px arial';
 	ctx.fillStyle = 'white';
 	ctx.fillText('Alive For: ' + game.time + 's', 210, 22);
 }
+// Points Display
+const yourScore = () => {
+	ctx.font = '20px arial';
+	ctx.fillStyle = 'white';
+	ctx.fillText('Score: ' + game.score, 210, 52);
+}
 // Gameover Text Display
-const gameOver = () => {
+const youLose = () => {
 	ctx.font = '35px arial';
 	ctx.fillStyle = 'red';
 	ctx.fillText('GAME OVER', 68, 250);
@@ -359,6 +372,14 @@ const deleteKnives = () => {
 		}
 	}
 }
+
+const deleteProjectiles = () => {
+	for(let i = 0; i < player.projectiles.length; i++) {
+		if(player.projectiles[i].y < 0){
+			player.projectiles.splice(i, 1)
+		}
+	}
+}
 // Zombie Collision detection and logic
 const zombieCollisionDetection = (player, zombie) => {
 	for(let i = 0; i < game.zombies.length; i++) {
@@ -368,8 +389,6 @@ const zombieCollisionDetection = (player, zombie) => {
 			player.y + player.height > zombie[i].y &&
 			player.life > 0) {
 			player.life -= 1
-			player.x = 150;
-			player.y = 550;
 			zombie.splice(i, 1)
 		}
 	}
@@ -393,7 +412,6 @@ const knifeCollisionDetection = (player, knife) => {
 		}
 	}
 }
-
 // Fuel Collision detection and logic
 const fuelCollisionDetection = (player, fuel) => {
 	for(let i = 0; i < game.fuels.length; i++) {	
@@ -413,6 +431,22 @@ const fuelCollisionDetection = (player, fuel) => {
 		}
 	}	
 }
+// Projectile collision detection
+const projectileCollisionDetection = () => {
+	for(let i = 0; i < player.projectiles.length; i++) {
+		for(let j = 0; j < game.zombies.length; j++) {
+			if( player.projectiles[i].x < game.zombies[j].x + game.zombies[j].width &&
+				player.projectiles[i].x + player.projectiles[i].width > game.zombies[j].x &&
+				player.projectiles[i].y < game.zombies[j].y + game.zombies[j].height &&
+				player.projectiles[i].y + player.projectiles[i].height > game.zombies[j].y) {					
+				player.projectiles.splice(i, 1)
+				game.zombies.splice(j, 1)
+				game.score += 10
+			}
+
+		}
+	}
+}
 
 // I will need to build a gauge that shows your progress in the level
 		// Should this just be based on a timer in the game? 
@@ -421,10 +455,10 @@ const fuelCollisionDetection = (player, fuel) => {
 		// happens
 
 let counter = 0;
-
+let it;
 function animate() {
-	clearCanvas()
 	counter++
+	clearCanvas()
 	game.drawZombies()
 	game.drawFuels()
 	game.drawKnives()
@@ -439,24 +473,19 @@ function animate() {
 	zombieCollisionDetection(player, game.zombies)
 	knifeCollisionDetection(player, game.knives)
 	fuelCollisionDetection(player, game.fuels)
+	projectileCollisionDetection()
 	displayLives()
 	displayFuel()
 	displayKnives()
 	survivalTimer()
+	yourScore()
 	deleteZombies()
 	deleteKnives()
 	deleteFuel()
+	deleteProjectiles()
 	window.requestAnimationFrame(animate)
 }
 animate()
-
-
-
-
-
-
-
-
 
 
 
