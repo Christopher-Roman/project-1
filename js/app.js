@@ -154,7 +154,8 @@ const game = {
 		player.draw()
 	},
 	makeNewZombie() {
-		const zombie = new Zombie()
+		let speed = Math.random() * 5
+		const zombie = new Zombie(speed)
 		game.zombies.push(zombie)
 	},
 	makeNewFuel() {
@@ -171,21 +172,20 @@ const game = {
 		}
 	},
 	moveZombies() {
-		const speed = Math.floor(Math.random() * 10)
 		for(let i = 0; i < this.zombies.length; i++){
-			this.zombies[i].y++
+			let speed = Math.floor(Math.random() * 5)
+			this.zombies[i].y += speed
 		}
 	},
 	moveFuels() {
-		const speed = Math.floor(Math.random() * 10)
+
 		for(let i = 0; i < this.fuels.length; i++){
 			this.fuels[i].y++
 		}
 	},
 	moveKnives() {
-		const speed = Math.floor(Math.random() * 10)
 		for(let i = 0; i < this.knives.length; i++){
-			this.knives[i].y += speed
+			this.knives[i].y++
 		}
 	},
 	drawFuels() {
