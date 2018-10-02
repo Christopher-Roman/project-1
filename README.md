@@ -1,8 +1,9 @@
-********************************************************************************************************************************
+************************************************************************************************************
 
-										Escape the Meandering Dead...
+Escape the Meandering Dead...
 
-********************************************************************************************************************************
+************************************************************************************************************
+
 1. The user should be able to control the sprite by moving it left, right, up, and down
 2. The user should be able to use those controls to dodge oncoming zombies and pick up items
 3. The user should lose a life if they run into a zombie.
