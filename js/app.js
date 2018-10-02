@@ -42,7 +42,6 @@ class Player {
 		this.down = false;
 		this.left = false;
 		this.right = false;
-		this.attack = false;
 	}
 	draw() {
 		ctx.beginPath()
@@ -51,7 +50,7 @@ class Player {
 		ctx.drawImage(playerSprite, this.x, this.y);
 	}
 	attacks() {
-		if(this.knives > 0 && this.attack == true) {
+		if(this.knives > 0) {
 			const projectile = new Projectiles()
 			this.projectiles.push(projectile)
 			this.drawProjectile()
@@ -64,7 +63,7 @@ class Player {
 	}
 	moveProjectile() {
 		for(let i = 0; i < this.projectiles.length; i++){
-			this.projectiles[i].y -= 10
+			this.projectiles[i].y -= 7
 		}
 	}
 	move(){
@@ -286,7 +285,7 @@ $(document).on('keydown', (event) => {
 		player.right = true;	
 	}
 	else if(event.keyCode == 32){
-		player.attack = true;
+		player.attacks()
 	}
 })
 
@@ -303,9 +302,6 @@ $(document).on('keyup', (event) => {
 	}
 	else if(event.keyCode == 39) {
 		player.right = false;	
-	}
-	else if(event.keyCode == 32){
-		player.attack = false;
 	}
 })
 
@@ -434,7 +430,6 @@ function animate() {
 	game.drawKnives()
 	player.draw()
 	player.move()
-	player.attacks()
 	player.drawProjectile()
 	player.moveProjectile()
 	game.moveZombies()
