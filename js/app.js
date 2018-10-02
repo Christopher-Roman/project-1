@@ -33,7 +33,7 @@ class Player {
 		this.life = 3;
 		this.knives = 2;
 		this.fuel = fuel;
-		this.x = 220
+		this.x = 150
 		this.y = 550;
 		this.height = 100;
 		this.width  = 40;
@@ -75,7 +75,10 @@ class Player {
 		}
 	}
 	attack() {
-
+		ctx.beginPath()
+		const projectileSprite = new Image();
+		projectileSprite.src = 'css/thrownKnife.png'
+		ctx.drawImage(projectileSprite, this.x, this.y)
 	}
 }		
 
@@ -85,8 +88,7 @@ const player = new Player(5)
 class Zombie {
 	constructor(yDirection) {
 		this.health = 1;
-	// shows up at the top of the screen
-		this.x = Math.floor(Math.random() * 450);
+		this.x = Math.floor(Math.random() * 310);
 		this.y = 0;
 		this.xDirection = 0
 		this.yDirection = 3;
@@ -99,15 +101,13 @@ class Zombie {
 		zombieSprite.src = 'css/zombie.gif'
 		ctx.drawImage(zombieSprite, this.x, this.y);
 	}
-	isDeader(){
-	}
 }
 
 // Fuel Class
 class Fuel {
 	constructor(yDirection) {
 		this.health = 1;
-		this.x = Math.floor(Math.random() * 450);
+		this.x = Math.floor(Math.random() * 310);
 		this.y = 0;
 		this.xDirection = 0
 		this.yDirection = 3;
@@ -126,7 +126,7 @@ class Fuel {
 class Knife {
 	constructor(yDirection) {
 		this.health = 1;
-		this.x = Math.floor(Math.random() * 450);
+		this.x = Math.floor(Math.random() * 310);
 		this.y = 0;
 		this.xDirection = 0
 		this.yDirection = 3;
@@ -224,10 +224,10 @@ const game = {
 				}
 				this.gameOver()
 				this.time++
-				console.log(game.time);
 			}, 1000)
 	}
 }
+// Calling game timer to start
 game.timer()
 
 // Key Down Listener
@@ -281,13 +281,41 @@ const displayFuel = () => {
 	ctx.fillStyle = 'white';
 	ctx.fillText('Fuel: ' + player.fuel, 10, 67);
 }
+const survivalTimer = () => {
+	ctx.font = '20px arial';
+	ctx.fillStyle = 'white';
+	ctx.fillText('Alive For: ' + game.time + 's', 210, 22);
+}
 // Gameover Text Display
 const gameOver = () => {
 	ctx.font = '35px arial';
 	ctx.fillStyle = 'red';
-	ctx.fillText('GAME OVER', 150, 250);
+	ctx.fillText('GAME OVER', 68, 250);
 }
-
+// Delete zombies from the array if they leave the canvas
+const deleteZombies = () => {
+	for(let i = 0; i < game.zombies.length; i++) {
+		if(game.zombies[i].y > canvas.height){
+			game.zombies.splice(i, 1)
+		}
+	}
+}
+// Delete fuel from the array if they leave the canvas
+const deleteFuel = () => {
+	for(let i = 0; i < game.fuels.length; i++) {
+		if(game.fuels[i].y > canvas.height){
+			game.fuels.splice(i, 1)
+		}
+	}
+}
+// Delete knives from the array if they leave the canvas
+const deleteKnives = () => {
+	for(let i = 0; i < game.knives.length; i++) {
+		if(game.knives[i].y > canvas.height){
+			game.knives.splice(i, 1)
+		}
+	}
+}
 // Zombie Collision detection and logic
 const zombieCollisionDetection = (player, zombie) => {
 	for(let i = 0; i < game.zombies.length; i++) {
@@ -297,7 +325,7 @@ const zombieCollisionDetection = (player, zombie) => {
 			player.y + player.height > zombie[i].y &&
 			player.life > 0) {
 			player.life -= 1
-			player.x = 220;
+			player.x = 150;
 			player.y = 550;
 			zombie.splice(i, 1)
 		}
@@ -330,14 +358,14 @@ const fuelCollisionDetection = (player, fuel) => {
 			player.x + player.width > fuel[i].x &&
 			player.y < fuel[i].y + fuel[i].height &&
 			player.y + player.height > fuel[i].y && 
-			player.fuel < 10 && player.life > 0) {
+			player.life > 0 && player.fuel < 10) {
 			player.fuel += 3
 			fuel.splice(i, 1)
 		} else if(player.x < fuel[i].x + fuel[i].width &&
 			player.x + player.width > fuel[i].x &&
 			player.y < fuel[i].y + fuel[i].height &&
 			player.y + player.height > fuel[i].y && 
-			player.fuel >= 10 && player.life > 0) {
+			player.life > 0 && player.fuel >= 10) {
 			fuel.splice(i, 1)
 		}
 	}	
@@ -369,6 +397,10 @@ function animate() {
 	displayLives()
 	displayFuel()
 	displayKnives()
+	survivalTimer()
+	deleteZombies()
+	deleteKnives()
+	deleteFuel()
 	window.requestAnimationFrame(animate)
 }
 animate()
