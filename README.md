@@ -22,4 +22,3 @@ Escape the Meandering Dead...
   (after MVP) Possible opening sequence of a non-user crashing into an obstacle before controls are handed over to teach them
 
   Link:
-  	https://christopher-roman.github.io/project-1/
