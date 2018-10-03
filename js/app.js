@@ -26,7 +26,9 @@ const ctx = canvas.getContext("2d");
 const clearCanvas = () => {
 	ctx.clearRect(0, 0, canvas.width, canvas.height)
 }
-
+const $winPicture = $('<img src="https://i.pinimg.com/originals/c5/32/09/c532096426f7313e365c22566fec1ae6.gif">')
+const $losePicture = $('<img src="https://24.media.tumblr.com/tumblr_lwl9wpw9mP1qkld3fo1_500.gif">')
+const $outOfGasPicture = $('<img src="https://media.giphy.com/media/HhcQYmkhymMNi/giphy.gif">')
 // Player Class
 class Player {
 	constructor(fuel) {
@@ -51,18 +53,17 @@ class Player {
 	}
 	attacks() {
 		if(this.knives > 0) {
-			const projectile = new Projectile()
+			const projectile = new Projectiles()
 			this.projectiles.push(projectile)
-			// this.drawProjectile()
 			this.knives--
 		}
 	}
-	drawProjectile() {
+	drawProjectiles() {
 		for(let i = 0; i < this.projectiles.length; i++){
 			this.projectiles[i].draw()
 		}
 	}
-	moveProjectile() {
+	moveProjectiles() {
 		for(let i = 0; i < this.projectiles.length; i++){
 			this.projectiles[i].y -= 7
 		}
@@ -95,9 +96,9 @@ class Player {
 	}
 }		
 
-const player = new Player(5)
+const player = new Player(4)
 
-class Projectile {
+class Projectiles {
 	constructor(){
 		this.x = player.x;
 		this.y = player.y;
@@ -178,11 +179,6 @@ const game = {
 	time: 0,
 	score: 0,
 	timer: null,
-	generatePlayer(){
-		const player = new Player
-		this.playerOne = player
-		player.draw()
-	},
 	makeNewZombie() {
 		const zombie = new Zombie()
 		game.zombies.push(zombie)
@@ -211,11 +207,6 @@ const game = {
 			this.zombies[i].y += speed
 		}
 	},
-	moveProjectiles() {
-		for(let i = 0; i < this.projectiles.length; i++){
-			this.projectiles[i].y -= 5
-		}
-	},
 	moveFuels() {
 		for(let i = 0; i < this.fuels.length; i++){
 			this.fuels[i].y++
@@ -237,19 +228,57 @@ const game = {
 		}
 	},
 	playerFuel() {
-		player.fuel--
-	},
-	playerAttack() {
-
+		player.fuel -= 1
 	},
 	gameOver() {
-		if(player.life === 0 || player.fuel === 0){
+		if(player.life == 0){
+			$('#my-canvas').remove()
+			game.loser()		
+			game.loserText()		
 			clearInterval(this.timer)
 			youLose()
 		}
 	},
+	youWin() {
+		if(this.time == 100) {
+			$('#my-canvas').fadeOut(2000)	
+			setTimeout(function() {
+			game.winner()
+			game.winnerText()
+			}, 2000)
+			clearInterval(this.timer)
+		}
+	},
+	outOfGas() {
+		if(player.fuel == 0){
+			$('#my-canvas').remove()
+			game.fuelLoss()	
+			game.fuelText()		
+			clearInterval(this.timer)		
+		}
+	},
+	winner() {
+		$('.win').append($winPicture)
+		$('.win').hide(3000)
+	},
+	winnerText() {
+		$('.win-text').text('You escaped the blast radius!')
+	},
+	fuelLoss() {
+		$('.fuelLoss').append($outOfGasPicture)
+		$('.fuelLoss').hide(3200)
+	},
+	fuelText(){
+		$('.fuelLoss-text').text('You ran out of gas...')
+	},
+	loser() {
+		$('.lose').append($losePicture)
+		$('.lose').hide(5000)
+	},
+	loserText() {
+		$('.lose-text').text('The infected caught you...')
+	},
 	timer() {
-			this.generatePlayer()
 			this.timer = setInterval(() =>{
 				if(this.time <= 50 && this.time % 2 == 0) {
 					this.makeNewZombie()
@@ -257,27 +286,44 @@ const game = {
 				if(this.time > 50 && this.time % 1 == 0) {
 					this.makeNewZombie()
 				}
-				if(this.time % 8 == 0 && this.time > 7) {
+				if(this.time <= 50 && this.time % 8 == 0 && this.time > 7) {
 					this.makeNewFuel()
 				}
-				if(this.time % 15 == 0 && this.time > 14) {
+				if(this.time > 50 && this.time % 12 == 0){
+					this.makeNewFuel()
+				}
+				if(this.time <= 50 && this.time % 15 == 0 && this.time > 14) {
+					this.makeNewKnife()
+				}
+				if(this.time > 50 && this.time % 20 == 0){
 					this.makeNewKnife()
 				}
 				if(this.time > 4 && this.time % 5 == 0) {
 					this.playerFuel()
 				}
-				if(this.score >= 200 && this.score % 200 == 0) {
+				if(this.score > 199 && this.score % 200 == 0) {
 					player.life++
 				}
-				console.log(player.projectiles);
+				if(this.win == true){
+					this.winnerText()
+				}
+				this.youWin()
 				this.gameOver()
+				this.outOfGas()
 				this.time++
 				this.score += 2
 			}, 1000)
 	}
 }
-// Calling game timer to start
-game.timer()
+
+
+// Start the game timer to start
+$('button').on('click', (event) => {
+	if(game.time == 0){
+		game.timer()
+		animate()
+	}
+})
 
 // Key Down Listener
 $(document).on('keydown', (event) => {
@@ -351,6 +397,12 @@ const youLose = () => {
 	ctx.fillStyle = 'red';
 	ctx.fillText('GAME OVER', 68, 250);
 }
+
+const youWin = () => {
+	ctx.font = '35px arial';
+	ctx.fillStyle = 'red';
+	ctx.fillText('You Survived!', 68, 250);
+}
 // Delete zombies from the array if they leave the canvas
 const deleteZombies = () => {
 	for(let i = 0; i < game.zombies.length; i++) {
@@ -423,7 +475,7 @@ const fuelCollisionDetection = (player, fuel) => {
 			player.y < fuel[i].y + fuel[i].height &&
 			player.y + player.height > fuel[i].y && 
 			player.life > 0 && player.fuel < 10) {
-			player.fuel += 3
+			player.fuel += 2
 			fuel.splice(i, 1)
 		} else if(player.x < fuel[i].x + fuel[i].width &&
 			player.x + player.width > fuel[i].x &&
@@ -458,7 +510,6 @@ const projectileCollisionDetection = () => {
 		// happens
 
 let counter = 0;
-let it;
 function animate() {
 	counter++
 	clearCanvas()
@@ -467,12 +518,11 @@ function animate() {
 	game.drawKnives()
 	player.draw()
 	player.move()
-	player.drawProjectile()
-	player.moveProjectile()
+	player.drawProjectiles()
+	player.moveProjectiles()
 	game.moveZombies()
 	game.moveFuels()
 	game.moveKnives()
-	game.gameOver()
 	zombieCollisionDetection(player, game.zombies)
 	knifeCollisionDetection(player, game.knives)
 	fuelCollisionDetection(player, game.fuels)
@@ -488,7 +538,6 @@ function animate() {
 	deleteProjectiles()
 	window.requestAnimationFrame(animate)
 }
-animate()
 
 
 

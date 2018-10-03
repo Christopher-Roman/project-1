@@ -1,9 +1,67 @@
+body {
+	background-color: black;
+	display: inline-flex;
+	background-image: url('zombiebackground.png');
+	background-repeat: no-repeat;
+	background-size: auto 0
+	background-position: bottom;
+	margin-bottom: 0;
+}
+.container1 {
+	width: 600;
+	height: 700;
+}
+
+.info {
+	font-family: 'Patrick Hand SC', cursive;
+	width: 500px;
+	font-size: 25px
+	text-shadow: 2px 2px 0 #000, 2px 2px 0 #000, 2px 2px 0 #000, 2px 2px 0 #000;
+}
+
+.ctrls {
+	padding-top: 30px;	
+	text-shadow: 2px 2px 0 #000, 2px 2px 0 #000, 2px 2px 0 #000, 2px 2px 0 #000;
+	color: white;
+	font-family: 'Patrick Hand SC', cursive;
+	font-size: 25px
+}
+
 #my-canvas {
 	background-image: url('background.png');
 	width: 350;
 	height: 450;
 	border: 15px solid gray;
 }
-body {
-	background-color: black;
+
+
+.win-text {
+	width: 500px;
+	font-family: 'Trade Winds', cursive;
+	font-size:  30px;
+	color: white;
+}
+
+.lose-text {
+	width: 500px;
+	font-family: 'Gloria Hallelujah', cursive;
+	color: red;
+	font-size: 30px;
+}
+
+.fuelLoss-text {
+	width: 500px;
+	font-family: 'Gloria Hallelujah', cursive;
+	color: red;
+	font-size: 30px;
+}
+
+.instructions {
+	text-shadow: 2px 2px 0 #000, 2px 2px 0 #000, 2px 2px 0 #000, 2px 2px 0 #000;
+	font-size: 25px;
+	color: white;
+}
+
+button {
+	font-size: 15px;
 }

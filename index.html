@@ -1,13 +1,37 @@
 <!DOCTYPE html>
 <html>
+	<link href="https://fonts.googleapis.com/css?family=Gloria+Hallelujah|Patrick+Hand+SC|Trade+Winds" rel="stylesheet">
 <head>
 	<title>Escape the Meandering Dead</title>
 	<link rel="stylesheet" type="text/css" href="css/style.css">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js"></script>
 </head>
 <body>
+	<div class="container1">
+		<div class="win"></div>
+		<div class="win-text"></div>
+		<div class="fuelLoss"></div>
+		<div class="fuelLoss-text"></div>
+		<div class="lose"></div>
+		<div class="lose-text"></div>
+		<canvas id="my-canvas" width="350" height="650"></canvas>
+	</div>
+	<div class="container2">
+		<div class="instructions">
+			<p class="info">The infection has spread beyond control... a nuke is inbound. You must escape 
+			the blast radius to survive!</p>
+			<p class="info">But, watch out! The infected are everywhere! Throw knives to clear a path.
+			and don't forget to refuel. Without your motorcycle, you'll never get out in time...</p>
+			<button>Start Game</button>
+		</div>
+		<div class="controls"></div>
+			<p class="ctrls">Arrow Right: Move Right</p>
+			<p class="ctrls">Arrow Left: Move Left</p>
+			<p class="ctrls">Arrow Up: Move Up</p>
+			<p class="ctrls">Arrow Down: Move Down</p>
+			<p class="ctrls">Space Bar: Throw Knives</p>
+	</div>
 
-	<canvas id="my-canvas" width="350" height="650"></canvas>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js"></script>
 	<script type="text/javascript" src="js/app.js"></script>
 </body>
 </html>
