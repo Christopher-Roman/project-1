@@ -28,7 +28,7 @@ body {
 }
 
 #my-canvas {
-	background-image: url('background.png');
+	background-image: url('road.png');
 	width: 350;
 	height: 450;
 	border: 15px solid dimgray;

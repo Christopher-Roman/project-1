@@ -24,7 +24,7 @@
 /*****************************************************
 
 				Context for Canvas
-				
+
 *****************************************************/
 
 const canvas = (document).getElementById("my-canvas");
@@ -191,18 +191,18 @@ class Knife {
 class Background {
 	constructor(){
 		this.x = 0;
-		this.y = -1300;
+		this.y = -700;
 	}
 	draw() {
 		ctx.beginPath()
 		const projectileSprite = new Image();
-		projectileSprite.src = 'css/background2.png'
+		projectileSprite.src = 'css/Road.png'
 		ctx.drawImage(projectileSprite, this.x, this.y)
 	}
 	moveBackground() {
 		this.y += 8
-		if(this.y > -649){
-			this.y = -1300
+		if(this.y > -350){
+			this.y = -700
 		}
 	}
 }
@@ -254,12 +254,12 @@ const game = {
 	},
 	moveFuels() {
 		for(let i = 0; i < this.fuels.length; i++){
-			this.fuels[i].y++
+			this.fuels[i].y += 2
 		}
 	},
 	moveKnives() {
 		for(let i = 0; i < this.knives.length; i++){
-			this.knives[i].y++
+			this.knives[i].y += 2	
 		}
 	},
 	drawFuels() {
@@ -334,7 +334,7 @@ const game = {
 				if(this.time <= 49 && this.time % 8 == 0 && this.time > 7) {
 					this.makeNewFuel()
 				}
-				if(this.time > 50 && this.time % 12 == 0){
+				if(this.time > 50 && this.time % 9 == 0){
 					this.makeNewFuel()
 				}
 				if(this.time <= 49 && this.time % 15 == 0 && this.time > 14) {
@@ -550,7 +550,7 @@ const fuelCollisionDetection = (player, fuel) => {
 			player.y < fuel[i].y + fuel[i].height &&
 			player.y + player.height > fuel[i].y && 
 			player.life > 0 && player.fuel < 10) {
-			player.fuel += 2
+			player.fuel += 1.5
 			fuel.splice(i, 1)
 		} else if(player.x < fuel[i].x + fuel[i].width &&
 			player.x + player.width > fuel[i].x &&
@@ -565,7 +565,7 @@ const fuelCollisionDetection = (player, fuel) => {
 const projectileCollisionDetection = () => {
 	for(let i = 0; i < player.projectiles.length; i++) {
 		for(let j = 0; j < game.zombies.length; j++) {
-			if( player.projectiles[i].x < game.zombies[j].x + game.zombies[j].width &&
+			if(player.projectiles[i].x < game.zombies[j].x + game.zombies[j].width &&
 				player.projectiles[i].x + player.projectiles[i].width > game.zombies[j].x &&
 				player.projectiles[i].y < game.zombies[j].y + game.zombies[j].height &&
 				player.projectiles[i].y + player.projectiles[i].height > game.zombies[j].y) {					
