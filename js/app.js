@@ -96,7 +96,7 @@ class Player {
 	}
 }		
 
-const player = new Player(4)
+const player = new Player(5)
 
 class Projectiles {
 	constructor(){
@@ -169,6 +169,27 @@ class Knife {
 		ctx.drawImage(knifeSprite, this.x, this.y);
 	}
 }
+//Background Class to make the background move
+class Background {
+	constructor(){
+		this.x = 0;
+		this.y = -1300;
+	}
+	draw() {
+		ctx.beginPath()
+		const projectileSprite = new Image();
+		projectileSprite.src = 'css/background2.png'
+		ctx.drawImage(projectileSprite, this.x, this.y)
+	}
+	moveBackground() {
+		this.y += 8
+		if(this.y > -649){
+			this.y = -1300
+		}
+	}
+}
+// Instantiating a new background.
+const backgroundOne = new Background()
 
 // Game Object
 const game = {
@@ -241,7 +262,7 @@ const game = {
 	},
 	youWin() {
 		if(this.time == 100) {
-			$('#my-canvas').fadeOut(2000)	
+			$('#my-canvas').fadeOut(1900)	
 			setTimeout(function() {
 			game.winner()
 			game.winnerText()
@@ -513,6 +534,8 @@ let counter = 0;
 function animate() {
 	counter++
 	clearCanvas()
+	backgroundOne.draw()
+	backgroundOne.moveBackground()
 	game.drawZombies()
 	game.drawFuels()
 	game.drawKnives()
