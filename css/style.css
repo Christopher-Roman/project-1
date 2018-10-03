@@ -20,7 +20,7 @@ body {
 }
 
 .ctrls {
-	padding-top: 30px;	
+	padding-top: 15px;	
 	text-shadow: 2px 2px 0 #000, 2px 2px 0 #000, 2px 2px 0 #000, 2px 2px 0 #000;
 	color: white;
 	font-family: 'Patrick Hand SC', cursive;
@@ -28,7 +28,7 @@ body {
 }
 
 #my-canvas {
-	background-image: url('road.png');
+	background-image: url('background2.png');
 	width: 350;
 	height: 450;
 	border: 15px solid dimgray;

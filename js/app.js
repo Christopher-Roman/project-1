@@ -1,3 +1,5 @@
+let animationHandle;
+let animationRunning = false
 /***********************************************************************************************************************************
 ************************************************************************************************************************************
 ** 																															      **
@@ -191,18 +193,18 @@ class Knife {
 class Background {
 	constructor(){
 		this.x = 0;
-		this.y = -700;
+		this.y = -1300;
 	}
 	draw() {
 		ctx.beginPath()
 		const projectileSprite = new Image();
-		projectileSprite.src = 'css/Road.png'
+		projectileSprite.src = 'css/background2.png'
 		ctx.drawImage(projectileSprite, this.x, this.y)
 	}
 	moveBackground() {
 		this.y += 8
-		if(this.y > -350){
-			this.y = -700
+		if(this.y > -649){
+			this.y = -1300
 		}
 	}
 }
@@ -281,6 +283,7 @@ const game = {
 			game.loser()		
 			game.loserText()		
 			clearInterval(this.timer)
+			cancelAnimationFrame(animationHandle)
 			youLose()
 		}
 	},
@@ -299,7 +302,8 @@ const game = {
 			$('#my-canvas').remove()
 			game.fuelLoss()	
 			game.fuelText()		
-			clearInterval(this.timer)		
+			clearInterval(this.timer)
+			cancelAnimationFrame(animationHandle)		
 		}
 	},
 	winner() {
@@ -343,7 +347,7 @@ const game = {
 				if(this.time > 50 && this.time % 20 == 0){
 					this.makeNewKnife()
 				}
-				if(this.time > 4 && this.time % 5 == 0) {
+				if(this.time > 2 && this.time % 5 == 0) {
 					this.playerFuel()
 				}
 				if(this.score > 199 && this.score % 200 == 0) {
@@ -357,7 +361,7 @@ const game = {
 				this.outOfGas()
 				this.time++
 				this.score += 2
-			}, 1000)
+			}, 2000)
 	}
 }
 
@@ -372,6 +376,7 @@ $('.start').on('click', (event) => {
 	if(game.time == 0){
 		game.timer()
 		animate()
+		animationRunning = true;
 	}
 })
 
@@ -444,13 +449,13 @@ const displayFuel = () => {
 const survivalTimer = () => {
 	ctx.font = '20px arial';
 	ctx.fillStyle = 'white';
-	ctx.fillText('Alive For: ' + game.time + 's', 210, 22);
+	ctx.fillText('Alive For: ' + game.time + 's', 220, 22);
 }
 // Points Display
 const yourScore = () => {
 	ctx.font = '20px arial';
 	ctx.fillStyle = 'white';
-	ctx.fillText('Score: ' + game.score, 210, 52);
+	ctx.fillText('Score: ' + game.score, 220, 52);
 }
 // Gameover Text Display
 const youLose = () => {
@@ -504,17 +509,85 @@ const deleteProjectiles = () => {
 	}
 }
 // Zombie Collision detection and logic
-const zombieCollisionDetection = (player, zombie) => {
+const zombieCollisionDetection = () => {
 	for(let i = 0; i < game.zombies.length; i++) {
-		if(player.x < zombie[i].x + zombie[i].width &&
-			player.x + player.width > zombie[i].x &&
-			player.y < zombie[i].y + zombie[i].height &&
-			player.y + player.height > zombie[i].y &&
+		if(player.x < game.zombies[i].x + game.zombies[i].width &&
+			player.x + player.width > game.zombies[i].x &&
+			player.y < game.zombies[i].y + game.zombies[i].height &&
+			player.y + player.height > game.zombies[i].y &&
 			player.life > 0) {
 			player.life -= 1
-			zombie.splice(i, 1)
+			game.zombies.splice(i, 1)
 		}
 	}
+}
+const collisionDetection = () => {
+	//zombies
+	for(let i = 0; i < game.zombies.length; i++) {
+		if(player.x < game.zombies[i].x + game.zombies[i].width &&
+			player.x + player.width > game.zombies[i].x &&
+			player.y < game.zombies[i].y + game.zombies[i].height &&
+			player.y + player.height > game.zombies[i].y &&
+			player.life > 0) {
+			player.life -= 1
+			game.zombies.splice(i, 1)
+		}
+	}
+
+	//knives
+
+	for(let i = 0; i < game.knives.length; i++) {
+		if(player.x < game.knives[i].x + game.knives[i].width &&
+			player.x + player.width > game.knives[i].x &&
+			player.y < game.knives[i].y + game.knives[i].height &&
+			player.y + player.height > game.knives[i].y && 
+			player.knives < 20 && player.life > 0) {
+			player.knives += 5
+			game.knives.splice(i, 1)
+		} else if(player.x < game.knives[i].x + game.knives[i].width &&
+			player.x + player.width > game.knives[i].x &&
+			player.y < game.knives[i].y + game.knives[i].height &&
+			player.y + player.height > game.knives[i].y && 
+			player.knives >= 20 && player.life > 0) {
+			game.knives.splice(i, 1)
+		}
+	}
+
+	//fuel
+	for(let i = 0; i < game.fuels.length; i++) {	
+		if(player.x < game.fuels[i].x + game.fuels[i].width &&
+			player.x + player.width > game.fuels[i].x &&
+			player.y < game.fuels[i].y + game.fuels[i].height &&
+			player.y + player.height > game.fuels[i].y && 
+			player.life > 0 && player.fuel < 10) {
+			player.fuel += 1.5
+			game.fuels.splice(i, 1)
+		} else if(player.x < game.fuels[i].x + game.fuels[i].width &&
+			player.x + player.width > game.fuels[i].x &&
+			player.y < game.fuels[i].y + game.fuels[i].height &&
+			player.y + player.height > game.fuels[i].y && 
+			player.life > 0 && player.fuel >= 10) {
+			game.fuels.splice(i, 1)
+		}
+	}
+
+
+	// projectile
+	for(let i = 0; i < player.projectiles.length; i++) {
+		for(let j = 0; j < game.zombies.length; j++) {
+			if( player.projectiles[i].x < game.zombies[j].x + game.zombies[j].width &&
+				player.projectiles[i].x + player.projectiles[i].width > game.zombies[j].x &&
+				player.projectiles[i].y < game.zombies[j].y + game.zombies[j].height &&
+				player.projectiles[i].y + player.projectiles[i].height > game.zombies[j].y) {					
+				player.projectiles.splice(i, 1)
+				game.zombies.splice(j, 1)
+				game.score += 10
+			}
+
+		}
+	}
+
+
 }
 
 /*****************************************************
@@ -524,40 +597,40 @@ const zombieCollisionDetection = (player, zombie) => {
 *****************************************************/
 
 // Knife Collision detection and logic
-const knifeCollisionDetection = (player, knife) => {
+const knifeCollisionDetection = () => {
 	for(let i = 0; i < game.knives.length; i++) {
-		if(player.x < knife[i].x + knife[i].width &&
+		if(player.x < game.knives[i].x + game.knives[i].width &&
 			player.x + player.width > knife[i].x &&
-			player.y < knife[i].y + knife[i].height &&
-			player.y + player.height > knife[i].y && 
+			player.y < game.knives[i].y + game.knives[i].height &&
+			player.y + player.height > game.knives[i].y && 
 			player.knives < 20 && player.life > 0) {
 			player.knives += 5
-			knife.splice(i, 1)
-		} else if(player.x < knife[i].x + knife[i].width &&
-			player.x + player.width > knife[i].x &&
-			player.y < knife[i].y + knife[i].height &&
-			player.y + player.height > knife[i].y && 
+			game.knives.splice(i, 1)
+		} else if(player.x < game.knives[i].x + game.knives[i].width &&
+			player.x + player.width > game.knives[i].x &&
+			player.y < game.knives[i].y + game.knives[i].height &&
+			player.y + player.height > game.knives[i].y && 
 			player.knives >= 20 && player.life > 0) {
-			knife.splice(i, 1)
+			game.knives.splice(i, 1)
 		}
 	}
 }
 // Fuel Collision detection and logic
-const fuelCollisionDetection = (player, fuel) => {
+const fuelCollisionDetection = () => {
 	for(let i = 0; i < game.fuels.length; i++) {	
-		if(player.x < fuel[i].x + fuel[i].width &&
-			player.x + player.width > fuel[i].x &&
-			player.y < fuel[i].y + fuel[i].height &&
-			player.y + player.height > fuel[i].y && 
+		if(player.x < game.fuels[i].x + game.fuels[i].width &&
+			player.x + player.width > game.fuels[i].x &&
+			player.y < game.fuels[i].y + game.fuels[i].height &&
+			player.y + player.height > game.fuels[i].y && 
 			player.life > 0 && player.fuel < 10) {
 			player.fuel += 1.5
-			fuel.splice(i, 1)
-		} else if(player.x < fuel[i].x + fuel[i].width &&
-			player.x + player.width > fuel[i].x &&
-			player.y < fuel[i].y + fuel[i].height &&
-			player.y + player.height > fuel[i].y && 
+			game.fuels.splice(i, 1)
+		} else if(player.x < game.fuels[i].x + game.fuels[i].width &&
+			player.x + player.width > game.fuels[i].x &&
+			player.y < game.fuels[i].y + game.fuels[i].height &&
+			player.y + player.height > game.fuels[i].y && 
 			player.life > 0 && player.fuel >= 10) {
-			fuel.splice(i, 1)
+			game.fuels.splice(i, 1)
 		}
 	}	
 }
@@ -583,41 +656,59 @@ const projectileCollisionDetection = () => {
 				  Animation Function
 
 *****************************************************/
-
 let counter = 0;
 function animate() {
 	counter++
-	clearCanvas()
-	backgroundOne.draw()
-	backgroundOne.moveBackground()
-	game.drawZombies()
-	game.drawFuels()
-	game.drawKnives()
-	player.draw()
-	player.move()
-	player.drawProjectiles()
-	player.moveProjectiles()
-	game.moveZombies()
-	game.moveFuels()
-	game.moveKnives()
-	zombieCollisionDetection(player, game.zombies)
-	knifeCollisionDetection(player, game.knives)
-	fuelCollisionDetection(player, game.fuels)
-	projectileCollisionDetection()
-	displayLives()
-	displayFuel()
-	displayKnives()
-	survivalTimer()
-	yourScore()
-	deleteZombies()
-	deleteKnives()
-	deleteFuel()
-	deleteProjectiles()
-	window.requestAnimationFrame(animate)
+	// if(counter % 2 == 0) {
+
+		clearCanvas()
+
+		deleteZombies()
+		deleteKnives()
+		deleteFuel()
+		deleteProjectiles()
+
+		backgroundOne.draw()
+		backgroundOne.moveBackground()
+		game.drawZombies()
+		game.drawFuels()
+		game.drawKnives()
+		player.draw()
+		player.move()
+		player.drawProjectiles()
+		player.moveProjectiles()
+		game.moveZombies()
+		game.moveFuels()
+		game.moveKnives()
+		// zombieCollisionDetection(player, game.zombies)
+		// knifeCollisionDetection(player, game.knives)
+		// fuelCollisionDetection(player, game.fuels)
+		// projectileCollisionDetection()
+		collisionDetection()
+		displayLives()
+		displayFuel()
+		displayKnives()
+		survivalTimer()
+		yourScore()
+
+	// }
+	animationHandle = window.requestAnimationFrame(animate)
 }
 
 
+$(document).on('keypress', (e) => {
+	if(e.key==="p") {
+		if (animationRunning) {
 
+			cancelAnimationFrame(animationHandle)
+			animationRunning = false;
+		}
+		else {
+			animate()
+			animationRunning = true;
+		}
+	}
+})
 
 
 
