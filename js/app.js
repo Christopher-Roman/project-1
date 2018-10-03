@@ -21,14 +21,32 @@
 ************************************************************************************************************************************
 ***********************************************************************************************************************************/
 
+/*****************************************************
+
+				Context for Canvas
+				
+*****************************************************/
+
 const canvas = (document).getElementById("my-canvas");
 const ctx = canvas.getContext("2d");
 const clearCanvas = () => {
 	ctx.clearRect(0, 0, canvas.width, canvas.height)
 }
+
+/*****************************************************
+			Ending Images for Each Ending
+*****************************************************/
+
 const $winPicture = $('<img src="https://i.pinimg.com/originals/c5/32/09/c532096426f7313e365c22566fec1ae6.gif">')
-const $losePicture = $('<img src="https://24.media.tumblr.com/tumblr_lwl9wpw9mP1qkld3fo1_500.gif">')
+const $losePicture = $('<img src="https://i.imgur.com/hr1m0hO.gif">')
 const $outOfGasPicture = $('<img src="https://media.giphy.com/media/HhcQYmkhymMNi/giphy.gif">')
+
+/*****************************************************
+
+					Object Classes
+
+*****************************************************/
+
 // Player Class
 class Player {
 	constructor(fuel) {
@@ -191,6 +209,12 @@ class Background {
 // Instantiating a new background.
 const backgroundOne = new Background()
 
+/*****************************************************
+
+					Game Object
+
+*****************************************************/
+
 // Game Object
 const game = {
 	zombies: [],
@@ -301,19 +325,19 @@ const game = {
 	},
 	timer() {
 			this.timer = setInterval(() =>{
-				if(this.time <= 50 && this.time % 2 == 0) {
+				if(this.time <= 49 && this.time % 2 == 0) {
 					this.makeNewZombie()
 				}
 				if(this.time > 50 && this.time % 1 == 0) {
 					this.makeNewZombie()
 				}
-				if(this.time <= 50 && this.time % 8 == 0 && this.time > 7) {
+				if(this.time <= 49 && this.time % 8 == 0 && this.time > 7) {
 					this.makeNewFuel()
 				}
 				if(this.time > 50 && this.time % 12 == 0){
 					this.makeNewFuel()
 				}
-				if(this.time <= 50 && this.time % 15 == 0 && this.time > 14) {
+				if(this.time <= 49 && this.time % 15 == 0 && this.time > 14) {
 					this.makeNewKnife()
 				}
 				if(this.time > 50 && this.time % 20 == 0){
@@ -337,16 +361,26 @@ const game = {
 	}
 }
 
+/*****************************************
+
+	  Event listeners for the game
+
+*****************************************/
 
 // Start the game timer to start
-$('button').on('click', (event) => {
+$('.start').on('click', (event) => {
 	if(game.time == 0){
 		game.timer()
 		animate()
 	}
 })
 
-// Key Down Listener
+// Refresh page key listener
+$('.refresh').on('click', (event) => {
+	location.reload()
+})
+
+// Key Down Listeners
 $(document).on('keydown', (event) => {
 	if(event.keyCode == 38){
 		player.up = true;	
@@ -365,7 +399,7 @@ $(document).on('keydown', (event) => {
 	}
 })
 
-// Key Up Listener
+// Key Up Listeners
 $(document).on('keyup', (event) => {
 	if(event.keyCode == 38) {
 		player.up = false;	
@@ -380,6 +414,12 @@ $(document).on('keyup', (event) => {
 		player.right = false;	
 	}
 })
+
+/*************************************
+
+	Information display in Canvas
+
+*************************************/
 
 // Life Text Display
 const displayLives = () => {
@@ -424,6 +464,13 @@ const youWin = () => {
 	ctx.fillStyle = 'red';
 	ctx.fillText('You Survived!', 68, 250);
 }
+
+/*****************************************************
+
+	Object removal when things are off the screen
+
+*****************************************************/
+
 // Delete zombies from the array if they leave the canvas
 const deleteZombies = () => {
 	for(let i = 0; i < game.zombies.length; i++) {
@@ -469,6 +516,13 @@ const zombieCollisionDetection = (player, zombie) => {
 		}
 	}
 }
+
+/*****************************************************
+
+	    Collision Detection for each Object
+
+*****************************************************/
+
 // Knife Collision detection and logic
 const knifeCollisionDetection = (player, knife) => {
 	for(let i = 0; i < game.knives.length; i++) {
@@ -524,11 +578,11 @@ const projectileCollisionDetection = () => {
 	}
 }
 
-// I will need to build a gauge that shows your progress in the level
-		// Should this just be based on a timer in the game? 
-		// The sprite on the gauge could just move at a set rate that is paused
-		// if you hit a zombie to delay it since you will slow down a bit if that
-		// happens
+/*****************************************************
+
+				  Animation Function
+
+*****************************************************/
 
 let counter = 0;
 function animate() {
