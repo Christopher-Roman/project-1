@@ -1,8 +1,8 @@
-************************************************************************************************************
 
-Escape the Meandering Dead...
+# Escape the Meandering Dead... #
 
-************************************************************************************************************
+![Imgur](https://i.imgur.com/SYM1FXA.png)
+
 
 1. The user should be able to control the sprite by moving it left, right, up, and down
 2. The user should be able to use those controls to dodge oncoming zombies and pick up items
@@ -17,8 +17,5 @@ Escape the Meandering Dead...
 10. The user should be able to pick up knives to throw at zombies to clear them out of the way
 11. The user should have a limit to how many knives they have available to them and the ability 
      to track how many they have currently 
-12. The user should be able to pick up or earn more lives by killing zombies that drop them over
-    give points to earn additional lives 
-  (after MVP) Possible opening sequence of a non-user crashing into an obstacle before controls are handed over to teach them
 
   Link:

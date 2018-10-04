@@ -66,7 +66,7 @@ class Player {
 	draw() {
 		ctx.beginPath()
 		const playerSprite = new Image();
-		playerSprite.src = 'css/playersprite.PNG'
+		playerSprite.src = 'https://i.imgur.com/KKA68Jo.png'
 		ctx.drawImage(playerSprite, this.x - 5, this.y);
 	}
 	attacks() {
