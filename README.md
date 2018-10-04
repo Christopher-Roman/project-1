@@ -18,6 +18,5 @@
 
   #### Use This Link to Play the Game: https://christopher-roman.github.io/project-1/ ####
 
-  ##### Technologies Used #####
-
+  ##### Technologies Used: #####
   ###### HTML/CSS, JavaScript, jQuery, and Canvas ######
