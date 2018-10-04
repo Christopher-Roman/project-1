@@ -521,9 +521,9 @@ const collisionDetection = () => {
 			zombieAndPlayer = true;
 			zombieIndex = i;
 		}
-			if(zombieAndPlayer == true) {
-				game.zombies.splice(zombieIndex, 1)
-			}
+		if(zombieAndPlayer == true) {
+			game.zombies.splice(zombieIndex, 1)
+		}
 	}
 
 	// Gather Knife Collision Detection

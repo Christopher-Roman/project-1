@@ -16,4 +16,8 @@
 	*The user should be able to pick up knives to throw at zombies to clear them out of the way
 	*The user should have a limit to how many knives they have available to them and the ability to track how many they have currently 
 
-  #### Link: https://christopher-roman.github.io/project-1/ ####
+  #### Use This Link to Play the Game: https://christopher-roman.github.io/project-1/ ####
+
+  ##### Technologies Used #####
+
+  ###### HTML/CSS, JavaScript, jQuery, and Canvas ######
