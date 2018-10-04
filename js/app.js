@@ -246,12 +246,12 @@ const game = {
 	},
 	moveFuels() {
 		for(let i = 0; i < this.fuels.length; i++){
-			this.fuels[i].y += 5
+			this.fuels[i].y += 7
 		}
 	},
 	moveKnives() {
 		for(let i = 0; i < this.knives.length; i++){
-			this.knives[i].y += 5	
+			this.knives[i].y += 7	
 		}
 	},
 	drawFuels() {
@@ -517,9 +517,9 @@ const collisionDetection = () => {
 			player.y < game.zombies[i].y + game.zombies[i].height &&
 			player.y + player.height > game.zombies[i].y &&
 			player.life > 0) {
-			player.life -= 1
 			zombieAndPlayer = true;
 			zombieIndex = i;
+			player.life -= 1
 		}
 		if(zombieAndPlayer == true) {
 			game.zombies.splice(zombieIndex, 1)
