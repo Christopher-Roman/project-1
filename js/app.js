@@ -519,10 +519,10 @@ const collisionDetection = () => {
 			player.life > 0) {
 			zombieAndPlayer = true;
 			zombieIndex = i;
-			player.life -= 1
 		}
 		if(zombieAndPlayer == true) {
 			game.zombies.splice(zombieIndex, 1)
+			player.life -= 1
 		}
 	}
 
@@ -535,7 +535,6 @@ const collisionDetection = () => {
 			player.y < game.knives[i].y + game.knives[i].height &&
 			player.y + player.height > game.knives[i].y && 
 			player.knives < 20 && player.life > 0) {
-			player.knives += 5;
 			knifeAndPlayer = true;
 			knifeIndex = i;
 		} else if(player.x < game.knives[i].x + game.knives[i].width &&
@@ -548,6 +547,7 @@ const collisionDetection = () => {
 		}
 		if(knifeAndPlayer == true){
 			game.knives.splice(knifeIndex, 1)
+			player.knives += 5;
 		}
 	}
 
