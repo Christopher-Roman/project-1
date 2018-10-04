@@ -113,7 +113,7 @@ class Player {
 		}
 	}
 }		
-
+// Instantiating a new player
 const player = new Player(50)
 
 class Projectiles {
@@ -271,7 +271,6 @@ const game = {
 			game.loserText()		
 			clearInterval(this.timer)
 			cancelAnimationFrame(animationHandle)
-			youLose()
 		}
 	},
 	youWin() {
@@ -407,6 +406,20 @@ $(document).on('keyup', (event) => {
 	}
 })
 
+// Pause the Animation
+$(document).on('keypress', (e) => {
+	if(e.key==="p") {
+		if (animationRunning) {
+			cancelAnimationFrame(animationHandle)
+			animationRunning = false;
+		}
+		else {
+			animate()
+			animationRunning = true;
+		}
+	}
+})
+
 /*************************************
 
 	Information display in Canvas
@@ -475,7 +488,7 @@ const deleteKnives = () => {
 		}
 	}
 }
-
+// Delete Projectiles from the array if they leave the canvas
 const deleteProjectiles = () => {
 	for(let i = 0; i < player.projectiles.length; i++) {
 		if(player.projectiles[i].y < 0){
@@ -483,7 +496,6 @@ const deleteProjectiles = () => {
 		}
 	}
 }
-
 
 /*****************************************************
 
@@ -578,9 +590,6 @@ const collisionDetection = () => {
 	}
 }
 
-
-
-
 /*****************************************************
 
 				  Animation Function
@@ -591,12 +600,12 @@ let counter = 0;
 function animate() {
 	counter++
 	clearCanvas()
+	backgroundOne.draw()
+	backgroundOne.moveBackground()
 	deleteZombies()
 	deleteKnives()
 	deleteFuel()
 	deleteProjectiles()
-	backgroundOne.draw()
-	backgroundOne.moveBackground()
 	game.drawZombies()
 	game.drawFuels()
 	game.drawKnives()
@@ -617,18 +626,6 @@ function animate() {
 }
 
 
-$(document).on('keypress', (e) => {
-	if(e.key==="p") {
-		if (animationRunning) {
-			cancelAnimationFrame(animationHandle)
-			animationRunning = false;
-		}
-		else {
-			animate()
-			animationRunning = true;
-		}
-	}
-})
 
 
 

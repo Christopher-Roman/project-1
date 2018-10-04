@@ -28,7 +28,7 @@ body {
 }
 
 #my-canvas {
-	/*background-image: url('background2.png');*/
+	background-image: url('background2.png');
 	width: 350;
 	height: 450;
 	border: 15px solid dimgray;
