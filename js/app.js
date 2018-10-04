@@ -1,6 +1,6 @@
 // Animation Handler for Pausing the Animation
 let animationHandle;
-let animationRunning = false
+let animationRunning = false;
 /***********************************************************************************************************************************
 ************************************************************************************************************************************
 ** 																															      **
@@ -51,7 +51,7 @@ const $outOfGasPicture = $('<img src="https://media.giphy.com/media/HhcQYmkhymMN
 class Player {
 	constructor(fuel) {
 		this.life = 3;
-		this.knives = 500;
+		this.knives = 5;
 		this.projectiles = [];
 		this.fuel = fuel;
 		this.x = 150;
@@ -114,7 +114,7 @@ class Player {
 	}
 }		
 // Instantiating a new player
-const player = new Player(50)
+const player = new Player(5)
 
 class Projectiles {
 	constructor(){
@@ -314,40 +314,40 @@ const game = {
 		$('.lose-text').text('The infected caught you...')
 	},
 	timer() {
-			this.timer = setInterval(() =>{
-				if(this.distance >= 51 && this.distance % 2 == 0) {
-					this.makeNewZombie()
-				}
-				if(this.distance <= 49 && this.distance % 1 == 0) {
-					this.makeNewZombie()
-				}
-				if(this.distance >= 51 && this.distance % 7 == 0 && this.distance < 93) {
-					this.makeNewFuel()
-				}
-				if(this.distance <= 49 && this.distance % 8 == 0){
-					this.makeNewFuel()
-				}
-				if(this.distance >= 51 && this.distance % 15 == 0 && this.distance < 86) {
-					this.makeNewKnife()
-				}
-				if(this.distance <= 49 && this.distance % 20 == 0){
-					this.makeNewKnife()
-				}
-				if(this.distance < 96 && this.distance % 5 == 0) {
-					this.playerFuel()
-				}
-				if(this.score > 199 && this.score % 200 == 0) {
-					player.life++
-				}
-				if(this.win == true){
-					this.winnerText()
-				}
-				this.youWin()
-				this.gameOver()
-				this.outOfGas()
-				this.distance--
-				this.score += 2
-			}, 1000)
+		this.timer = setInterval(() =>{
+			if(this.distance >= 51 && this.distance % 2 == 0) {
+				this.makeNewZombie()
+			}
+			if(this.distance <= 49 && this.distance % 1 == 0) {
+				this.makeNewZombie()
+			}
+			if(this.distance >= 51 && this.distance % 7 == 0 && this.distance < 93) {
+				this.makeNewFuel()
+			}
+			if(this.distance <= 49 && this.distance % 8 == 0){
+				this.makeNewFuel()
+			}
+			if(this.distance >= 51 && this.distance % 15 == 0 && this.distance < 86) {
+				this.makeNewKnife()
+			}
+			if(this.distance <= 49 && this.distance % 20 == 0){
+				this.makeNewKnife()
+			}
+			if(this.distance < 96 && this.distance % 5 == 0) {
+				this.playerFuel()
+			}
+			if(this.score > 199 && this.score % 200 == 0) {
+				player.life++
+			}
+			if(this.win == true){
+				this.winnerText()
+			}
+			this.youWin()
+			this.gameOver()
+			this.outOfGas()
+			this.distance--
+			this.score += 2
+		}, 1000)
 	}
 }
 
