@@ -452,13 +452,13 @@ const displayFuel = () => {
 const distanceTraveled = () => {
 	ctx.font = '15px arial';
 	ctx.fillStyle = 'white';
-	ctx.fillText('Exit Blast Radius in ' + game.distance + 's', 190, 22);
+	ctx.fillText('Exit Blast Radius in ' + game.distance + 's', 187, 22);
 }
 // Points Display
 const yourScore = () => {
 	ctx.font = '20px arial';
 	ctx.fillStyle = 'white';
-	ctx.fillText('Score: ' + game.score, 220, 52);
+	ctx.fillText('Score: ' + game.score, 250, 52);
 }
 
 /*****************************************************
@@ -581,8 +581,7 @@ const collisionDetection = () => {
 				game.zombies[i].y + game.zombies[i].height > player.projectiles[j].y) {
 				projectilesAndZombies = true;
 				zombiesIndex = i;
-				projectilesIndex = j;	
-				console.log(projectilesAndZombies);
+				projectilesIndex = j;
 			}
 		}
 	}
