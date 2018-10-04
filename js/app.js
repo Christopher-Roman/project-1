@@ -66,7 +66,7 @@ class Player {
 	draw() {
 		ctx.beginPath()
 		const playerSprite = new Image();
-		playerSprite.src = 'css/Playersprite.PNG'
+		playerSprite.src = 'css/playersprite.PNG'
 		ctx.drawImage(playerSprite, this.x - 5, this.y);
 	}
 	attacks() {
@@ -112,7 +112,8 @@ class Player {
 			}
 		}
 	}
-}		
+}
+
 // Instantiating a new player
 const player = new Player(5)
 
@@ -181,6 +182,7 @@ class Knife {
 		ctx.drawImage(knifeSprite, this.x, this.y);
 	}
 }
+
 // Background Class to make the background move
 class Background {
 	constructor(){
@@ -200,6 +202,7 @@ class Background {
 		}
 	}
 }
+
 // Instantiating a new background.
 const backgroundOne = new Background()
 
