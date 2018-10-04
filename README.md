@@ -1,7 +1,7 @@
 
 # Escape the Meandering Dead... #
 
-![Imgur](https://i.imgur.com/tm6OX52.png)
+![Imgur](https://i.imgur.com/tm6OX52.png) ![Imgur](https://i.imgur.com/f6MyoIz.png)
 
 
 1. The user should be able to control the sprite by moving it left, right, up, and down
