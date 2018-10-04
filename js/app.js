@@ -53,13 +53,13 @@ const $outOfGasPicture = $('<img src="https://media.giphy.com/media/HhcQYmkhymMN
 class Player {
 	constructor(fuel) {
 		this.life = 3;
-		this.knives = 5;
+		this.knives = 500;
 		this.projectiles = [];
 		this.fuel = fuel;
 		this.x = 150;
 		this.y = 550;
 		this.height = 100;
-		this.width  = 40;
+		this.width  = 30;
 		this.up = false;
 		this.down = false;
 		this.left = false;
@@ -68,8 +68,11 @@ class Player {
 	draw() {
 		ctx.beginPath()
 		const playerSprite = new Image();
+		// ctx.rect(this.x, this.y, this.width, this.height)
+		// ctx.fillStyle = 'red'
+		// ctx.fill()
 		playerSprite.src = 'css/Player-Sprite-cutout.PNG'
-		ctx.drawImage(playerSprite, this.x, this.y);
+		ctx.drawImage(playerSprite, this.x - 5, this.y);
 	}
 	attacks() {
 		if(this.knives > 0) {
@@ -116,17 +119,20 @@ class Player {
 	}
 }		
 
-const player = new Player(5)
+const player = new Player(50)
 
 class Projectiles {
 	constructor(){
 		this.x = player.x;
 		this.y = player.y;
-		this.width = 15;
-		this.height = 15;
+		this.height = 4;
+		this.width = 4;
 	}
 	draw() {
 		ctx.beginPath()
+		// ctx.rect(this.x, this.y, this.width, this.height)
+		// ctx.fillStyle = 'red'
+		// ctx.fill()
 		const projectileSprite = new Image();
 		projectileSprite.src = 'css/thrownKnife.png'
 		ctx.drawImage(projectileSprite, this.x, this.y)
@@ -135,31 +141,34 @@ class Projectiles {
 
 // Zombie Class
 class Zombie {
-	constructor(yDirection) {
+	constructor() {
 		this.health = 1;
-		this.x = Math.floor(Math.random() * 310);
-		this.y = 0;
-		this.xDirection = 0;
-		this.yDirection = 3;
-		this.height = 64;
-		this.width = 64;
+		this.x = Math.floor(Math.random() * 290);
+		this.y = -67;
+		// this.xDirection = 0;
+		// this.yDirection = 3;
+		this.height = 67;
+		this.width = 48;
 	}
 	draw(){
 		ctx.beginPath()
+		// ctx.rect(this.x, this.y, this.width, this.height)
+		// ctx.fillStyle = 'red'
+		// ctx.fill()
 		const zombieSprite = new Image();
-		zombieSprite.src = 'css/zombie.gif'
-		ctx.drawImage(zombieSprite, this.x, this.y);
+		zombieSprite.src = 'css/ZombieWalk.gif'
+		ctx.drawImage(zombieSprite, this.x -7, this.y);
 	}
 }
 
 // Fuel Class
 class Fuel {
-	constructor(yDirection) {
+	constructor() {
 		this.health = 1;
 		this.x = Math.floor(Math.random() * 310);
 		this.y = 0;
-		this.xDirection = 0
-		this.yDirection = 3;
+		// this.xDirection = 0
+		// this.yDirection = 3;
 		this.height = 45;
 		this.width = 45;
 	}
@@ -173,14 +182,14 @@ class Fuel {
 
 // Knife Class
 class Knife {
-	constructor(yDirection) {
+	constructor() {
 		this.health = 1;
 		this.x = Math.floor(Math.random() * 310);
 		this.y = 0;
-		this.xDirection = 0
-		this.yDirection = 3;
+		// this.xDirection = 0
+		// this.yDirection = 3;
 		this.height = 45;
-		this.width = 45;
+		this.width = 25;
 	}
 	draw(){
 		ctx.beginPath()
@@ -223,7 +232,7 @@ const game = {
 	fuels: [],
 	knives: [],
 	projectiles: [],
-	time: 0,
+	distance: 100,
 	score: 0,
 	timer: null,
 	makeNewZombie() {
@@ -237,10 +246,6 @@ const game = {
 	makeNewKnife() {
 		const knife = new Knife()
 		game.knives.push(knife)
-	},
-	makeNewProjectiles() {
-		const projectile = new Projectiles()
-		game.projectiles.push(projectile)
 	},
 	drawZombies() {
 		for(let i = 0; i < this.zombies.length; i++) {
@@ -256,12 +261,12 @@ const game = {
 	},
 	moveFuels() {
 		for(let i = 0; i < this.fuels.length; i++){
-			this.fuels[i].y += 2
+			this.fuels[i].y += 5
 		}
 	},
 	moveKnives() {
 		for(let i = 0; i < this.knives.length; i++){
-			this.knives[i].y += 2	
+			this.knives[i].y += 5	
 		}
 	},
 	drawFuels() {
@@ -288,7 +293,7 @@ const game = {
 		}
 	},
 	youWin() {
-		if(this.time == 100) {
+		if(this.distance == 0) {
 			$('#my-canvas').fadeOut(1900)	
 			setTimeout(function() {
 			game.winner()
@@ -298,7 +303,7 @@ const game = {
 		}
 	},
 	outOfGas() {
-		if(player.fuel == 0){
+		if(player.fuel <= 0){
 			$('#my-canvas').remove()
 			game.fuelLoss()	
 			game.fuelText()		
@@ -329,25 +334,25 @@ const game = {
 	},
 	timer() {
 			this.timer = setInterval(() =>{
-				if(this.time <= 49 && this.time % 2 == 0) {
+				if(this.distance >= 51 && this.distance % 2 == 0) {
 					this.makeNewZombie()
 				}
-				if(this.time > 50 && this.time % 1 == 0) {
+				if(this.distance <= 49 && this.distance % 1 == 0) {
 					this.makeNewZombie()
 				}
-				if(this.time <= 49 && this.time % 8 == 0 && this.time > 7) {
+				if(this.distance >= 51 && this.distance % 7 == 0 && this.distance < 93) {
 					this.makeNewFuel()
 				}
-				if(this.time > 50 && this.time % 9 == 0){
+				if(this.distance <= 49 && this.distance % 8 == 0){
 					this.makeNewFuel()
 				}
-				if(this.time <= 49 && this.time % 15 == 0 && this.time > 14) {
+				if(this.distance >= 51 && this.distance % 15 == 0 && this.distance < 86) {
 					this.makeNewKnife()
 				}
-				if(this.time > 50 && this.time % 20 == 0){
+				if(this.distance <= 49 && this.distance % 20 == 0){
 					this.makeNewKnife()
 				}
-				if(this.time > 2 && this.time % 5 == 0) {
+				if(this.distance < 96 && this.distance % 5 == 0) {
 					this.playerFuel()
 				}
 				if(this.score > 199 && this.score % 200 == 0) {
@@ -359,9 +364,9 @@ const game = {
 				this.youWin()
 				this.gameOver()
 				this.outOfGas()
-				this.time++
+				this.distance--
 				this.score += 2
-			}, 2000)
+			}, 1000)
 	}
 }
 
@@ -373,7 +378,7 @@ const game = {
 
 // Start the game timer to start
 $('.start').on('click', (event) => {
-	if(game.time == 0){
+	if(game.distance == 100){
 		game.timer()
 		animate()
 		animationRunning = true;
@@ -445,11 +450,11 @@ const displayFuel = () => {
 	ctx.fillStyle = 'white';
 	ctx.fillText('Fuel: ' + player.fuel, 10, 67);
 }
-// Survival Time Display
-const survivalTimer = () => {
-	ctx.font = '20px arial';
+// Distance Traveled Display
+const distanceTraveled = () => {
+	ctx.font = '15px arial';
 	ctx.fillStyle = 'white';
-	ctx.fillText('Alive For: ' + game.time + 's', 220, 22);
+	ctx.fillText('Exit Blast Radius in ' + game.distance + 's', 190, 22);
 }
 // Points Display
 const yourScore = () => {
@@ -479,7 +484,7 @@ const youWin = () => {
 // Delete zombies from the array if they leave the canvas
 const deleteZombies = () => {
 	for(let i = 0; i < game.zombies.length; i++) {
-		if(game.zombies[i].y > canvas.height){
+		if(game.zombies[i].y > 800){
 			game.zombies.splice(i, 1)
 		}
 	}
@@ -573,21 +578,42 @@ const collisionDetection = () => {
 
 
 	// projectile
-	for(let i = 0; i < player.projectiles.length; i++) {
-		for(let j = 0; j < game.zombies.length; j++) {
-			if( player.projectiles[i].x < game.zombies[j].x + game.zombies[j].width &&
-				player.projectiles[i].x + player.projectiles[i].width > game.zombies[j].x &&
-				player.projectiles[i].y < game.zombies[j].y + game.zombies[j].height &&
-				player.projectiles[i].y + player.projectiles[i].height > game.zombies[j].y) {					
-				player.projectiles.splice(i, 1)
-				game.zombies.splice(j, 1)
-				game.score += 10
-			}
+	// for(let j = 0; j < game.zombies.length; j++) {
+	// 	for(let i = 0; i < player.projectiles.length; i++) {
+	// 		if( player.projectiles[i].x < game.zombies[j].x + game.zombies[j].width &&
+	// 			player.projectiles[i].x + player.projectiles[i].width > game.zombies[j].x &&
+	// 			player.projectiles[i].y < game.zombies[j].y + game.zombies[j].height &&
+	// 			player.projectiles[i].y + player.projectiles[i].height > game.zombies[j].y) {				
+	// 			player.projectiles.splice(i, 1)
+	// 			game.zombies.splice(j, 1)
+	// 			game.score += 10
+	// 		}
 
+	// 	}
+	// }
+	projectilesAndZombies = false;
+	let zombiesIndex = 0;
+	let projectilesIndex = 0;
+	// declare some vars you will maybe change in the loop/if
+	for(let j = 0; j < player.projectiles.length; j++){
+		for(let i = 0; i < game.zombies.length; i++) {
+			if( game.zombies[i].x < player.projectiles[j].x + player.projectiles[j].width &&
+				game.zombies[i].x + game.zombies[i].width > player.projectiles[j].x &&
+				game.zombies[i].y < player.projectiles[j].y + player.projectiles[j]. height &&
+				game.zombies[i].y + game.zombies[i].height > player.projectiles[j].y) {
+				// set it up so that splicing will happen
+				projectilesAndZombies = true;
+				zombiesIndex = i;
+				projectilesIndex = j;	
+				console.log(projectilesAndZombies);
+			}
 		}
 	}
-
-
+	if(projectilesAndZombies == true) {
+		game.zombies.splice(zombiesIndex, 1)
+		player.projectiles.splice(projectilesIndex, 1)
+		game.score += 10
+	}
 }
 
 /*****************************************************
@@ -656,17 +682,17 @@ const projectileCollisionDetection = () => {
 				  Animation Function
 
 *****************************************************/
+
 let counter = 0;
 function animate() {
 	counter++
-	// if(counter % 2 == 0) {
 
 		clearCanvas()
 
 		deleteZombies()
 		deleteKnives()
 		deleteFuel()
-		deleteProjectiles()
+		// deleteProjectiles()
 
 		backgroundOne.draw()
 		backgroundOne.moveBackground()
@@ -684,11 +710,13 @@ function animate() {
 		// knifeCollisionDetection(player, game.knives)
 		// fuelCollisionDetection(player, game.fuels)
 		// projectileCollisionDetection()
+		// if(counter % 5 == 0) {
 		collisionDetection()
+		// }
 		displayLives()
 		displayFuel()
 		displayKnives()
-		survivalTimer()
+		distanceTraveled()
 		yourScore()
 
 	// }
@@ -699,7 +727,6 @@ function animate() {
 $(document).on('keypress', (e) => {
 	if(e.key==="p") {
 		if (animationRunning) {
-
 			cancelAnimationFrame(animationHandle)
 			animationRunning = false;
 		}
