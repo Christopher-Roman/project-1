@@ -1,8 +1,11 @@
 
 # Escape the Meandering Dead... #
 ![Imgur](https://i.imgur.com/23s9LkD.png)
+##### Original Wire Frame ####
 
 ![Imgur](https://i.imgur.com/8z2yIU8.png) ![Imgur](https://i.imgur.com/f6MyoIz.png)
+#### Actual Game Play ####
+
 
 ## User Story ##
 	* The user should be able to control the sprite by moving it left, right, up, and down
