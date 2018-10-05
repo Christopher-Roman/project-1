@@ -1,10 +1,10 @@
 
 # Escape the Meandering Dead... #
-![Imgur](https://i.imgur.com/23s9LkD.png)
 ##### Original Wire Frame ####
+![Imgur](https://i.imgur.com/sKW0bGm.png)
 
-![Imgur](https://i.imgur.com/8z2yIU8.png) ![Imgur](https://i.imgur.com/f6MyoIz.png)
 #### Actual Game Play ####
+![Imgur](https://i.imgur.com/8z2yIU8.png) ![Imgur](https://i.imgur.com/f6MyoIz.png)
 
 
 ## User Story ##
