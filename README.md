@@ -1,5 +1,6 @@
 
 # Escape the Meandering Dead... #
+![Imgur](https://i.imgur.com/23s9LkD.png)
 
 ![Imgur](https://i.imgur.com/8z2yIU8.png) ![Imgur](https://i.imgur.com/f6MyoIz.png)
 
