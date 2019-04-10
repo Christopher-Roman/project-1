@@ -271,7 +271,8 @@ const game = {
 		player.fuel -= 1
 	},
 	gameOver() {
-		if(player.life == 0){
+		if(player.life == 0 && this.win == false && this.lossFuel == false){
+			this.lossLife = true
 			$('#my-canvas').remove()
 			game.loser()		
 			game.loserText()		
@@ -280,8 +281,8 @@ const game = {
 		}
 	},
 	youWin() {
-		if(this.distance === 0 && this.lossFuel === false && this.lossLife === false) {
-			this.win == true
+		if(this.distance <= 0 && this.lossFuel === false && this.lossLife === false) {
+			this.win = true
 			$('#my-canvas').fadeOut(1900)	
 			setTimeout(function() {
 			game.winner()
@@ -292,6 +293,7 @@ const game = {
 	},
 	outOfGas() {
 		if(player.fuel <= 0 && this.win === false && this.lossLife === false){
+			this.lossFuel = true
 			$('#my-canvas').remove()
 			game.fuelLoss()	
 			game.fuelText()		
