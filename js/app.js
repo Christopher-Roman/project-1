@@ -220,6 +220,9 @@ const game = {
 	distance: 100,
 	score: 0,
 	timer: null,
+	lossfuel: false,
+	lossLife: false,
+	win: false,
 	makeNewZombie() {
 		const zombie = new Zombie()
 		game.zombies.push(zombie)
@@ -277,7 +280,8 @@ const game = {
 		}
 	},
 	youWin() {
-		if(this.distance == 0) {
+		if(this.distance === 0 && this.lossFuel === false && this.lossLife === false) {
+			this.win == true
 			$('#my-canvas').fadeOut(1900)	
 			setTimeout(function() {
 			game.winner()
@@ -287,7 +291,7 @@ const game = {
 		}
 	},
 	outOfGas() {
-		if(player.fuel <= 0){
+		if(player.fuel <= 0 && this.win === false && this.lossLife === false){
 			$('#my-canvas').remove()
 			game.fuelLoss()	
 			game.fuelText()		
@@ -520,10 +524,10 @@ const collisionDetection = () => {
 			zombieAndPlayer = true;
 			zombieIndex = i;
 		}
-		if(zombieAndPlayer == true) {
-			game.zombies.splice(zombieIndex, 1)
-			player.life -= 1
-		}
+	}
+	if(zombieAndPlayer == true) {
+		game.zombies.splice(zombieIndex, 1)
+		player.life -= 1
 	}
 
 	// Gather Knife Collision Detection
@@ -545,10 +549,10 @@ const collisionDetection = () => {
 			knifeAndPlayer = true;
 			knifeIndex = i;
 		}
-		if(knifeAndPlayer == true){
-			game.knives.splice(knifeIndex, 1)
-			player.knives += 5;
-		}
+	}
+	if(knifeAndPlayer == true){
+		game.knives.splice(knifeIndex, 1)
+		player.knives += 5;
 	}
 
 	// Gather Fuel Collision Detection
@@ -563,10 +567,10 @@ const collisionDetection = () => {
 			fuelAndPlayer = true;
 			fuelIndex = i;
 		}
-		if(fuelAndPlayer == true) {
-			player.fuel += 1.5
-			game.fuels.splice(fuelIndex, 1)
-		}
+	}
+	if(fuelAndPlayer == true) {
+		player.fuel += 1.5
+		game.fuels.splice(fuelIndex, 1)
 	}
 
 	// Projectile/Zombie Collision Detection
