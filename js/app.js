@@ -270,9 +270,23 @@ const game = {
 	playerFuel() {
 		player.fuel -= 1
 	},
-	gameOver() {
-		if(player.life == 0 && this.win == false && this.lossFuel == false){
+	setEndConditions() {
+		if(player.life === 0) {
 			this.lossLife = true
+			this.lossFuel = false
+			this.win = false
+		} else if(player.fuel <= 0) {
+			this.lossFuel = true
+			this.win = false
+			this.lossLife = false
+		} else if(this.distance <=0) {
+			this.win = true
+			this.lossLife = false
+			this.lossFuel =false
+		}
+	},
+	gameOver() {
+		if(this.lossLife){
 			$('#my-canvas').remove()
 			game.loser()		
 			game.loserText()		
@@ -281,8 +295,7 @@ const game = {
 		}
 	},
 	youWin() {
-		if(this.distance <= 0 && this.lossFuel === false && this.lossLife === false) {
-			this.win = true
+		if(this.win) {
 			$('#my-canvas').fadeOut(1900)	
 			setTimeout(function() {
 			game.winner()
@@ -292,8 +305,7 @@ const game = {
 		}
 	},
 	outOfGas() {
-		if(player.fuel <= 0 && this.win === false && this.lossLife === false){
-			this.lossFuel = true
+		if(this.lossFuel){
 			$('#my-canvas').remove()
 			game.fuelLoss()	
 			game.fuelText()		
@@ -324,6 +336,10 @@ const game = {
 	},
 	timer() {
 		this.timer = setInterval(() =>{
+			this.setEndConditions()
+			this.youWin()
+			this.gameOver()
+			this.outOfGas()
 			if(this.distance >= 51 && this.distance % 2 == 0) {
 				this.makeNewZombie()
 			}
@@ -348,12 +364,6 @@ const game = {
 			if(this.score > 199 && this.score % 200 == 0) {
 				player.life++
 			}
-			if(this.win == true){
-				this.winnerText()
-			}
-			this.youWin()
-			this.gameOver()
-			this.outOfGas()
 			this.distance--
 			this.score += 2
 		}, 1000)
@@ -368,7 +378,7 @@ const game = {
 
 // Start the game timer to start
 $('.start').on('click', (event) => {
-	if(game.distance == 100){
+	if(game.distance === 100){
 		game.timer()
 		animate()
 		animationRunning = true;
